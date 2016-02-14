@@ -1,9 +1,9 @@
-package com.manpdev.androidnanodegree.popularmov.popularmovielist;
+package com.manpdev.androidnanodegree.popularmov.movielist;
 
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
  */
-public interface PopularMovieListContract {
+public interface MovieListContract {
 
     interface PopularMovieListView{
 

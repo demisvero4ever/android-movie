@@ -1,7 +1,6 @@
-package com.manpdev.androidnanodegree.popularmov.popularmovielist;
+package com.manpdev.androidnanodegree.popularmov.movielist;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 
-public class PopularMovieListFragment extends Fragment implements PopularMovieListContract.PopularMovieListView{
+public class MovieListFragment extends Fragment implements MovieListContract.PopularMovieListView{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

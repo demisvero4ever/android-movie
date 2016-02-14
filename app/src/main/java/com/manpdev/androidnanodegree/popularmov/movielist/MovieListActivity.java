@@ -1,10 +1,10 @@
-package com.manpdev.androidnanodegree.popularmov.popularmovielist;
+package com.manpdev.androidnanodegree.popularmov.movielist;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.manpdev.androidnanodegree.popularmov.R;
 
-public class PopularMovieListActivity extends AppCompatActivity{
+public class MovieListActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

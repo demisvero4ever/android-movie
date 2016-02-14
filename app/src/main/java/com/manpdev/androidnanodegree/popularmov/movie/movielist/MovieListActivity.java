@@ -1,12 +1,22 @@
-package com.manpdev.androidnanodegree.popularmov.movielist;
+package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.manpdev.androidnanodegree.popularmov.R;
-import com.manpdev.androidnanodegree.popularmov.moviedetails.MovieDetailsActivity;
-import com.manpdev.androidnanodegree.popularmov.moviedetails.MovieDetailsFragment;
+import com.manpdev.androidnanodegree.popularmov.movie.data.api.MoviesApi;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
+import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.MovieDetailsActivity;
+import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.MovieDetailsFragment;
+
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class MovieListActivity extends AppCompatActivity implements MovieListFragment.MovieSelectionListener{
 
@@ -22,6 +32,29 @@ public class MovieListActivity extends AppCompatActivity implements MovieListFra
             mTwoPanels = true;
             updateMovieDetailFragment(0);
         }
+
+        Retrofit retro = new Retrofit.Builder()
+                .baseUrl("http://api.themoviedb.org")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        MoviesApi api = retro.create(MoviesApi.class);
+
+
+        api.getPopularMovieList("1e4e113e2fa60c705a6c17d78dfe5cb2", 1).enqueue(new Callback<MovieWrapperModel>() {
+            @Override
+            public void onResponse(Response<MovieWrapperModel> response, Retrofit retrofit) {
+                MovieWrapperModel result = response.body();
+
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.getMessage();
+            }
+        });
+
     }
 
     @Override

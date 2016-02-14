@@ -1,4 +1,4 @@
-package com.manpdev.androidnanodegree.popularmov.moviedetails;
+package com.manpdev.androidnanodegree.popularmov.movie.moviedetails;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

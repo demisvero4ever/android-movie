@@ -4,5 +4,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_movie_details_container"
-    tools:context="com.manpdev.androidnanodegree.popularmov.moviedetails.MovieDetailsActivity"/>
+    tools:context=".movie.moviedetails.MovieDetailsActivity"/>
 

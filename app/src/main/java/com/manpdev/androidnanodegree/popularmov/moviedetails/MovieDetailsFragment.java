@@ -11,16 +11,23 @@ import com.manpdev.androidnanodegree.popularmov.R;
 
 public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.MovieDetailsView{
 
+    public static final String MOVIE_ID_EXTRA = "extra_movie_id";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState == null){
+
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_popular_movie_list, container, false);
+        return inflater.inflate(R.layout.fragment_movie_details, container, false);
     }
 
     @Override

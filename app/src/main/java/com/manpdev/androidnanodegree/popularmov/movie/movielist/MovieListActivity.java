@@ -32,29 +32,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieListFra
             mTwoPanels = true;
             updateMovieDetailFragment(0);
         }
-
-        Retrofit retro = new Retrofit.Builder()
-                .baseUrl("http://api.themoviedb.org")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        MoviesApi api = retro.create(MoviesApi.class);
-
-
-        api.getPopularMovieList("1e4e113e2fa60c705a6c17d78dfe5cb2", 1).enqueue(new Callback<MovieWrapperModel>() {
-            @Override
-            public void onResponse(Response<MovieWrapperModel> response, Retrofit retrofit) {
-                MovieWrapperModel result = response.body();
-
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                t.getMessage();
-            }
-        });
-
     }
 
     @Override

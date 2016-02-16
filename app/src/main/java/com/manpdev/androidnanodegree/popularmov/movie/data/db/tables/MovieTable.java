@@ -1,6 +1,7 @@
 package com.manpdev.androidnanodegree.popularmov.movie.data.db.tables;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 
@@ -9,7 +10,10 @@ import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContrac
  */
 public class MovieTable {
 
-    private static final String CREATE_TABLE_SQL_V1 = "CREATE TABLE `pm_movie` ( " +
+    private static final String TAG = "MovieTable";
+
+    private static final String CREATE_TABLE_SQL_V1 = "CREATE TABLE "+
+            MovieContract.MovieEntry.TABLE_NAME +" ( " +
             MovieContract.MovieEntry._ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
             MovieContract.MovieEntry.COLUMN_CLOUD_ID + " NUMERIC NOT NULL UNIQUE, " +
             MovieContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
@@ -24,8 +28,10 @@ public class MovieTable {
     }
 
     public static void updateTable(SQLiteDatabase db, int oldVersion, int newVersion){
+        if(db == null || oldVersion == newVersion)
+            return;
 
-
+        Log.d(TAG, String.format("updateTable: oldVersion: %d/ newVersion: %d.", oldVersion, newVersion));
     }
 
 }

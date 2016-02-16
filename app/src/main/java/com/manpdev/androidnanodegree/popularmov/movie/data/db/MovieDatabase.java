@@ -13,6 +13,7 @@ public class MovieDatabase extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "movie.db";
     private static final int DB_VERSION = 1;
+    private static final String PRAGMA_FOREIGN_KEYS_ON = "PRAGMA foreign_keys=ON; ";
 
     public MovieDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -21,6 +22,12 @@ public class MovieDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         MovieTable.createTable(db);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        db.execSQL(PRAGMA_FOREIGN_KEYS_ON);
     }
 
     @Override

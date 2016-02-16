@@ -24,7 +24,4 @@ public class MovieContract {
         public static final String COLUMN_SYNOPSIS = "synopsis";
 
     }
-
-
-
 }

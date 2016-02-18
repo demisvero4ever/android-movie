@@ -22,9 +22,30 @@ public class MovieTable {
             MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL, " +
             MovieContract.MovieEntry.COLUMN_SYNOPSIS + " TEXT NOT NULL " + ")";
 
+    private static final String SCRIPT_CREATE_INDEX_1 =
+            "CREATE INDEX MOVIE_ID_INDX on "+ MovieContract.MovieEntry.TABLE_NAME +
+                    " ("+
+                        MovieContract.MovieEntry._ID +
+                    ")";
+
+    private static final String SCRIPT_CREATE_INDEX_2 =
+            "CREATE INDEX MOVIE_TITLE_INDX on "+ MovieContract.MovieEntry.TABLE_NAME +
+                    " ("+
+                        MovieContract.MovieEntry.COLUMN_TITLE +
+                    ")";
+
+    private static final String SCRIPT_CREATE_INDEX_3 =
+            "CREATE INDEX MOVIE_CLOUD_ID_INDX on "+ MovieContract.MovieEntry.TABLE_NAME +
+                    " ("+
+                    MovieContract.MovieEntry.COLUMN_CLOUD_ID +
+                    ")";
+
 
     public static void createTable(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_SQL_V1);
+        db.execSQL(SCRIPT_CREATE_INDEX_1);
+        db.execSQL(SCRIPT_CREATE_INDEX_2);
+        db.execSQL(SCRIPT_CREATE_INDEX_3);
     }
 
     public static void updateTable(SQLiteDatabase db, int oldVersion, int newVersion){

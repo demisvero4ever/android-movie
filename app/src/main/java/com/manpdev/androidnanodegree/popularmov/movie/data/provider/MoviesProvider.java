@@ -30,10 +30,8 @@ public class MoviesProvider extends ContentProvider{
     @Override
     public boolean onCreate() {
         initUriMatcher();
-
         this.mMovieDatabase = new MovieDatabase(getContext());
-
-        return false;
+        return true;
     }
 
     @Nullable

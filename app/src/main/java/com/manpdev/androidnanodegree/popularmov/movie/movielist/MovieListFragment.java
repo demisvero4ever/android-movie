@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import java.util.List;
 public class MovieListFragment extends Fragment implements MovieListContract.PopularMovieListView, OnMoviePosterClick{
 
     private MovieSelectionListener mSelectionListener;
-
     private MovieListContract.PopularMovieListPresenter mPresenter;
 
     private RecyclerView mList;
@@ -48,7 +46,6 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
         this.mList.setAdapter(this.mMovieListAdapter);
 
         mPresenter.loadMovieList(getLoaderManager());
-
         return root;
     }
 

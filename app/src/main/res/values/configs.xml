@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="movie_db_api_url">http://api.themoviedb.org</string>
+    <string name="movie_db_poster_api_url">http://image.tmdb.org/t/p/w185</string>
+
+    <integer name="movie_list_columns">2</integer>
+
+</resources>

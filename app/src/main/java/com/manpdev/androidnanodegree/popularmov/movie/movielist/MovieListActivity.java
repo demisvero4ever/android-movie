@@ -5,18 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.manpdev.androidnanodegree.popularmov.R;
-import com.manpdev.androidnanodegree.popularmov.movie.data.api.MoviesApi;
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
 import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.MovieDetailsActivity;
 import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.MovieDetailsFragment;
-
-import java.util.List;
-
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class MovieListActivity extends AppCompatActivity implements MovieListFragment.MovieSelectionListener{
 
@@ -27,6 +17,8 @@ public class MovieListActivity extends AppCompatActivity implements MovieListFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+
+        //SyncDataService.startSyncData(this, SyncMovieTask.TASK_ID);
 
         if (findViewById(R.id.fragment_movie_details_container) != null) {
             mTwoPanels = true;

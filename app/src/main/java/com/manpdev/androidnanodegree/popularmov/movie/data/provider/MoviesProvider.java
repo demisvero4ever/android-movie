@@ -43,8 +43,10 @@ public class MoviesProvider extends ContentProvider{
 
         switch (sUriMatcher.match(uri)){
             case URI_MATCH_MOVIE:
-                result = database.query(MovieContract.MovieEntry.TABLE_NAME, MovieContract.MovieEntry.COLUMNS_ALL,
-                                        null, null, null, null, null);
+                String[] columns =  (projection == null) ? MovieContract.MovieEntry.COLUMNS_ALL : projection;
+
+                result = database.query(MovieContract.MovieEntry.TABLE_NAME, columns,
+                                        selection, selectionArgs, null, null, sortOrder);
                 break;
 
             case URI_MATCH_MOVIE_ID:

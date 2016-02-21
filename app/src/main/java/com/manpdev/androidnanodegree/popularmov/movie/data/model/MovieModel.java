@@ -56,15 +56,15 @@ public class MovieModel implements Parcelable{
         return overview;
     }
 
-    public String getPoster_path() {
+    public String getPosterPath() {
         return poster_path;
     }
 
-    public String getBackdrop_path() {
+    public String getBackdropPath() {
         return backdrop_path;
     }
 
-    public String getRelease_date() {
+    public String getReleaseDate() {
         return release_date;
     }
 
@@ -72,8 +72,40 @@ public class MovieModel implements Parcelable{
         return video;
     }
 
-    public double getVote_average() {
+    public double getVoteAverage() {
         return vote_average;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public void setPosterPath(String poster_path) {
+        this.poster_path = poster_path;
+    }
+
+    public void setBackdropPath(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
+    }
+
+    public void setReleaseDate(String release_date) {
+        this.release_date = release_date;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
+
+    public void setVoteAverage(double vote_average) {
+        this.vote_average = vote_average;
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {

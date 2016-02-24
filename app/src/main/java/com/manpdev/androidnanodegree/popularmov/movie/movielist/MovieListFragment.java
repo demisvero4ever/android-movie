@@ -1,6 +1,9 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
+import com.manpdev.androidnanodegree.popularmov.movie.tasks.SyncMovieTask;
+import com.manpdev.androidnanodegree.popularmov.services.SyncDataService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +28,15 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     private RecyclerView mList;
     private MovieListPosterAdapter mMovieListAdapter;
 
+    private final static int sListenerId = 123;
+    private BroadcastReceiver mSyncReceiver;
+    private boolean mLoadedData;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SyncDataService.startSyncData(getActivity().getApplicationContext(), SyncMovieTask.TASK_ID, sListenerId);
         this.mPresenter = new MovieList(this);
     }
 
@@ -54,6 +64,19 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
         super.onAttach(context);
         try{
             mSelectionListener = (MovieSelectionListener) context;
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(SyncDataService.ACTION_SYNC_COMPLETED);
+            this.mSyncReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if(!mLoadedData && mPresenter != null)
+                        mPresenter.refreshMovieList(MovieListFragment.this.getLoaderManager());
+                }
+            };
+
+            context.registerReceiver(mSyncReceiver, filter);
+
         }catch (Exception ex){
             ex.printStackTrace();
             throw ex;
@@ -64,10 +87,16 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     public void onDetach() {
         super.onDetach();
         mSelectionListener = null;
+        getActivity().unregisterReceiver(mSyncReceiver);
     }
 
     @Override
     public void showPosterList(List<MovieModel> list) {
+        if(list != null && list.size() > 0){
+            mLoadedData = true;
+            getActivity().unregisterReceiver(mSyncReceiver);
+        }
+
         this.mMovieListAdapter = new MovieListPosterAdapter(getContext(), list, this);
         this.mList.swapAdapter(mMovieListAdapter, false);
     }

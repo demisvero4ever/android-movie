@@ -1,8 +1,11 @@
 package com.manpdev.androidnanodegree.popularmov.movie.data.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +15,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.movie.data.db.MovieDatabase;
+
+import java.util.ArrayList;
 
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
@@ -58,6 +63,9 @@ public class MoviesProvider extends ContentProvider{
                 Log.e(TAG, message);
                 throw new IllegalArgumentException(message);
         }
+
+        if(getContext() != null)
+            result.setNotificationUri(getContext().getContentResolver(), uri);
 
         return result;
     }
@@ -154,6 +162,33 @@ public class MoviesProvider extends ContentProvider{
                 return MovieContract.MovieEntry.CONTENT_TYPE_ITEM;
             default:
                 return null;
+        }
+    }
+
+    @NonNull
+    @Override
+    public ContentProviderResult[] applyBatch(@NonNull ArrayList<ContentProviderOperation> operations)
+            throws OperationApplicationException {
+
+        int operationsNumber = operations.size();
+        if (operationsNumber == 0)
+            return new ContentProviderResult[0];
+
+        SQLiteDatabase db = mMovieDatabase.getWritableDatabase();
+
+        db.beginTransaction();
+
+        ContentProviderResult[] results = new ContentProviderResult[operationsNumber];
+
+        try {
+            for (int i = 0; i < operationsNumber; i++) {
+                results[i] = operations.get(i).apply(this, results, i);
+            }
+            db.setTransactionSuccessful();
+            return results;
+        }
+        finally {
+            db.endTransaction();
         }
     }
 

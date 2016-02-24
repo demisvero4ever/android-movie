@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
@@ -27,6 +28,7 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
     private MovieListContract.PopularMovieListView mView;
     private String mPosterApiPath;
+    public static final int MOVIE_LOADER_ID = 214;
 
     public MovieList( MovieListContract.PopularMovieListView view) {
         this.mView = view;
@@ -35,8 +37,12 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
     @Override
     public void loadMovieList(LoaderManager loaderManager) {
-        int MOVIE_LOADER_ID = 214;
         loaderManager.initLoader(MOVIE_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void refreshMovieList(LoaderManager loaderManager) {
+        loaderManager.restartLoader(MOVIE_LOADER_ID, null, this);
     }
 
     @Override
@@ -66,11 +72,15 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
             return result;
 
         MovieModel model;
+        String posterPath;
 
         while(!data.isAfterLast()){
             model = new MovieModel();
             model.setId(data.getInt(0));
-            model.setPosterPath(mPosterApiPath + data.getString(1));
+            posterPath = data.getString(1);
+
+            if(!TextUtils.isEmpty(posterPath))
+                model.setPosterPath(mPosterApiPath + posterPath);
             result.add(model);
             data.moveToNext();
         }

@@ -18,8 +18,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
-        //SyncDataService.startSyncData(this, SyncMovieTask.TASK_ID);
-
         if (findViewById(R.id.fragment_movie_details_container) != null) {
             mTwoPanels = true;
             updateMovieDetailFragment(0);

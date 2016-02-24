@@ -38,9 +38,9 @@ public class MovieApiRequester {
         this.mApiKey = context.getResources().getString(R.string.movie_api_key);
     }
 
-    public MovieWrapperModel getMovieList(int page) throws Throwable {
+    public MovieWrapperModel getSortedMovieList(@MoviesApi.SortingOptions String sortOption) throws Throwable {
         try {
-            Response<MovieWrapperModel> response = this.mMovieApi.getPopularMovieList(this.mApiKey, page).execute();
+            Response<MovieWrapperModel> response = this.mMovieApi.getSortedMovieList(this.mApiKey, sortOption).execute();
 
             if(response.code() != 200)
                 throw new Throwable(String.format(Locale.US, "Http Status: %d", response.code()));

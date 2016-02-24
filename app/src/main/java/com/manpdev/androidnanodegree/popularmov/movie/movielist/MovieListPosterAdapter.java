@@ -2,6 +2,7 @@ package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,10 @@ public class MovieListPosterAdapter extends RecyclerView.Adapter<MovieListPoster
 
     @Override
     public void onBindViewHolder(MovieListPosterAdapter.PosterViewHolder holder, int position) {
-        mPicasso.load(mMovieList.get(position).getPosterPath()).into(holder.getPosterView());
+        if(!TextUtils.isEmpty(mMovieList.get(position).getPosterPath()))
+            mPicasso.load(mMovieList.get(position).getPosterPath()).error(R.drawable.ic_no_poster_available).into(holder.getPosterView());
+        else
+            mPicasso.load(R.drawable.ic_no_poster_available).into(holder.getPosterView());
         holder.setmMovieId(mMovieList.get(position).getId());
     }
 

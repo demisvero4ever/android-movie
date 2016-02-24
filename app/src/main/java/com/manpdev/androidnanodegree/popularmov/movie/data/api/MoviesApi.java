@@ -1,9 +1,11 @@
 package com.manpdev.androidnanodegree.popularmov.movie.data.api;
 
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
+import android.support.annotation.StringDef;
+
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
 
-import java.util.List;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import retrofit.Call;
 import retrofit.http.GET;
@@ -14,6 +16,15 @@ import retrofit.http.Query;
  */
 public interface MoviesApi {
 
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({
+            SORT_POPULARITY_DESC,
+            SORT_VOTE_AVERAGE_DESC
+    })
+    @interface SortingOptions {}
+    String SORT_POPULARITY_DESC = "popularity.desc";
+    String SORT_VOTE_AVERAGE_DESC = "vote_average.desc";
+
     @GET("3/discover/movie")
-    Call<MovieWrapperModel> getPopularMovieList(@Query("api_key") String apiKey, @Query("page") int page);
+    Call<MovieWrapperModel> getSortedMovieList(@Query("api_key") String apiKey, @Query("sort_by") String sortBy);
 }

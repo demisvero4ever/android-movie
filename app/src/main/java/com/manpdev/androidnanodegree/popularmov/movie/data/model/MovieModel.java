@@ -16,6 +16,7 @@ public class MovieModel implements Parcelable{
     private String release_date;
     private boolean video;
     private double vote_average;
+    private double popularity;
 
     public MovieModel() {}
 
@@ -29,6 +30,7 @@ public class MovieModel implements Parcelable{
         release_date = in.readString();
         video = in.readByte() != 0;
         vote_average = in.readDouble();
+        popularity = in.readDouble();
     }
 
     @Override
@@ -41,6 +43,7 @@ public class MovieModel implements Parcelable{
         dest.writeString(release_date);
         dest.writeByte((byte) (video ? 1 : 0));
         dest.writeDouble(vote_average);
+        dest.writeDouble(popularity);
     }
 
 
@@ -76,6 +79,10 @@ public class MovieModel implements Parcelable{
         return vote_average;
     }
 
+    public double getPopularity() {
+        return popularity;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -106,6 +113,10 @@ public class MovieModel implements Parcelable{
 
     public void setVoteAverage(double vote_average) {
         this.vote_average = vote_average;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {

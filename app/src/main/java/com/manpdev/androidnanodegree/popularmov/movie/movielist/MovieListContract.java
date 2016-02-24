@@ -19,5 +19,6 @@ public interface MovieListContract {
 
     interface PopularMovieListPresenter{
         void loadMovieList(LoaderManager loaderManager);
+        void refreshMovieList(LoaderManager loaderManager);
     }
 }

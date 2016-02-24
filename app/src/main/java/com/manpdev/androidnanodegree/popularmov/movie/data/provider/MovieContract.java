@@ -18,9 +18,10 @@ public class MovieContract {
         public static final String COLUMN_POSTER = "poster";
         public static final String COLUMN_VOTE_AVERAGE = "vote_avg";
         public static final String COLUMN_SYNOPSIS = "synopsis";
+        public static final String COLUMN_POPULARITY = "popularity";
 
         public static String[] COLUMNS_ALL = {_ID, COLUMN_CLOUD_ID, COLUMN_TITLE,
-                COLUMN_POSTER, COLUMN_SYNOPSIS, COLUMN_VOTE_AVERAGE, COLUMN_RELEASE_DATE};
+                COLUMN_POSTER, COLUMN_SYNOPSIS, COLUMN_VOTE_AVERAGE, COLUMN_RELEASE_DATE, COLUMN_POPULARITY};
 
         public static final String CONTENT_TYPE = getDirBaseType(TABLE_NAME);
         public static final String CONTENT_TYPE_ITEM = getItemBaseType(TABLE_NAME);

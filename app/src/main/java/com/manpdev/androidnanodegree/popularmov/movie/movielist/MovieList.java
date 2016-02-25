@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.text.TextUtils;
 
 import com.manpdev.androidnanodegree.popularmov.R;
+import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MoviesProvider;
@@ -32,6 +33,8 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
             MovieContract.MovieEntry.COLUMN_POSTER
     };
 
+    private String mSortingOption;
+
     private MovieListContract.PopularMovieListView mView;
     private String mPosterApiPath;
 
@@ -44,6 +47,8 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
         this.mView = view;
         this.mLoadManager = loaderManager;
         this.mPosterApiPath = view.getContext().getString(R.string.movie_db_poster_api_url);
+
+        this.mSortingOption = getSortingString();
     }
 
     @Override
@@ -89,7 +94,7 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
                 dataProjection,
                 null,
                 null,
-                null
+                mSortingOption
         );
     }
 
@@ -131,10 +136,23 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
         if(intent.getAction().equals(SyncDataService.ACTION_SYNC_FAILED)) {
             mView.showMessage(R.string.sync_data_failed);
-            return;
         }
 
-        refreshMovieList();
+        if(!mSortingOption.equals(getSortingString())) {
+            this.mSortingOption = getSortingString();
+            refreshMovieList();
+        }
     }
 
+
+    public String getSortingString() {
+        switch (Preferences.getSortingOption(mView.getContext())){
+            case Preferences.SORT_POPULARITY_DESC:
+                return MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
+            case Preferences.SORT_VOTE_AVERAGE_DESC:
+                return MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
+        }
+
+        return "";
+    }
 }

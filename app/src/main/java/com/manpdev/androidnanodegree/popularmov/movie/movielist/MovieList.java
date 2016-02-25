@@ -89,7 +89,7 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
     @Override
     public void unregisterListener() {
         mContext.unregisterReceiver(mDataSyncReceiver);
-        Preferences.registerPreferencesListener(mContext, this);
+        Preferences.unregisterPreferencesListener(mContext, this);
     }
 
     @Override

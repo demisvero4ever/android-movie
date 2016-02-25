@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/op_refresh_list"
         android:icon="@drawable/ic_refresh_white_24dp"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/op_refresh_list_label" />
+        android:title="@string/op_refresh_list_label"
+        app:showAsAction="ifRoom|withText" />
 
-    <group android:id="@+id/group_sort_by" android:checkableBehavior="single">
-        <item android:id="@+id/op_sort_by_popularity"
-            android:title="@string/op_sort_by_popularity_label" />
-        <item android:id="@+id/op_sort_by_vote_avg"
-            android:title="@string/op_sort_by_vote_avg_label" />
-    </group>
+    <item
+        android:id="@+id/file"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:title="Sort"
+        app:showAsAction="ifRoom|withText">
+        <menu>
+            <group
+                android:id="@+id/group_sort_by"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/op_sort_by_popularity"
+                    android:icon="@drawable/ic_whatshot_black_24dp"
+                    android:title="@string/op_sort_by_popularity_label" />
+                <item
+                    android:id="@+id/op_sort_by_vote_avg"
+                    android:icon="@drawable/ic_poll_black_24dp"
+                    android:title="@string/op_sort_by_vote_avg_label" />
+            </group>
+        </menu>
+    </item>
+
+
 </menu>

@@ -60,9 +60,11 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
                 return true;
             case R.id.op_sort_by_popularity:
                 Preferences.setSortingOption(this, Preferences.SORT_POPULARITY_DESC);
+                item.setChecked(true);
                 return true;
             case R.id.op_sort_by_vote_avg:
                 Preferences.setSortingOption(this, Preferences.SORT_VOTE_AVERAGE_DESC);
+                item.setChecked(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

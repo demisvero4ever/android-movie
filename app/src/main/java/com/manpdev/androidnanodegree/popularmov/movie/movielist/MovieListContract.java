@@ -13,17 +13,15 @@ import java.util.List;
 public interface MovieListContract {
 
     interface PopularMovieListView{
-        Context getContext();
         void showMovieList(List<MovieModel> list);
         void showMessage(int resourceId);
     }
 
     interface PopularMovieListPresenter{
-        void registerSyncDataListener();
-        void unregisterSyncDataListener();
-        void startSyncData();
+        void registerListeners();
+        void unregisterListener();
 
         void loadMovieList();
-        void refreshMovieList();
+        void dismissMovieList();
     }
 }

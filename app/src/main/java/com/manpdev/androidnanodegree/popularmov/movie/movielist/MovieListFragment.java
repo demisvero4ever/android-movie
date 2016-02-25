@@ -1,25 +1,25 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
-import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListFragment extends Fragment implements MovieListContract.PopularMovieListView,
-        OnMoviePosterClick, SharedPreferences.OnSharedPreferenceChangeListener{
+        OnMoviePosterClick{
+
+    private static final String TAG = "MovieListFragment";
 
     private MovieSelectionListener mSelectionListener;
     private MovieListContract.PopularMovieListPresenter mPresenter;
@@ -27,12 +27,10 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     private RecyclerView mList;
     private MovieListPosterAdapter mMovieListAdapter;
 
-    private boolean mLoadedData;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mPresenter = new MovieList(this, getLoaderManager());
+        this.mPresenter = new MovieList(getActivity().getApplicationContext(), this, getLoaderManager());
     }
 
     @Override
@@ -56,33 +54,34 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     @Override
     public void onStart() {
         super.onStart();
-        if(!this.mLoadedData)
+        if(mList.getAdapter().getItemCount() == 0)
             mPresenter.loadMovieList();
 
-        Preferences.registerPreferencesListener(getContext(), this);
-
         mSelectionListener = (MovieSelectionListener) getActivity();
-        mPresenter.registerSyncDataListener();
+        mPresenter.registerListeners();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        Preferences.unregisterPreferencesListener(getContext(), this);
-
         mSelectionListener = null;
-        mPresenter.unregisterSyncDataListener();
+        mPresenter.unregisterListener();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.dismissMovieList();
+        mPresenter = null;
     }
 
     @Override
     public void showMovieList(List<MovieModel> list) {
-        if(list != null && list.size() > 0){
-            this.mLoadedData = true;
+        if(list != null && list.size() > 0) {
             this.mMovieListAdapter.setmMovieList(list);
             this.mMovieListAdapter.notifyDataSetChanged();
-        }else{
-            mPresenter.startSyncData();
+            Log.d(TAG, "showMovieList: List Updated");
         }
     }
 
@@ -95,11 +94,5 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     public void onMoviePosterSelected(int movieId) {
         if(mSelectionListener != null)
             mSelectionListener.onSelectMovie(movieId);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(Preferences.SELECTED_SORTING_OPTION))
-            mPresenter.startSyncData();
     }
 }

@@ -15,7 +15,7 @@ import com.manpdev.androidnanodegree.popularmov.movie.tasks.SyncMovieTask;
 public class SyncDataService extends IntentService {
     private static final String ACTION_SYNC_DATA = "com.manpdev.androidnanodegree.popularmov.services.action.syncdata";
 
-    public static final String EXTRA_JOD_ID = "com.manpdev.androidnanodegree.popularmov.services.extra.jobid";
+    public static final String EXTRA_TASK_ID = "com.manpdev.androidnanodegree.popularmov.services.extra.taskid";
     private static final String EXTRA_NOTIFY = "com.manpdev.androidnanodegree.popularmov.services.extra.notify";
 
     public static final String ACTION_SYNC_COMPLETED = "com.manpdev.androidnanodegree.popularmov.services.action.sync_completed";
@@ -28,7 +28,7 @@ public class SyncDataService extends IntentService {
     public static void startSyncData(Context context, int jobId, boolean notify) {
         Intent intent = new Intent(context, SyncDataService.class);
         intent.setAction(ACTION_SYNC_DATA);
-        intent.putExtra(EXTRA_JOD_ID, jobId);
+        intent.putExtra(EXTRA_TASK_ID, jobId);
         intent.putExtra(EXTRA_NOTIFY, notify);
         context.startService(intent);
     }
@@ -41,14 +41,14 @@ public class SyncDataService extends IntentService {
 
             boolean syncResult = false;
 
-            switch (intent.getIntExtra(EXTRA_JOD_ID, 0)) {
+            switch (intent.getIntExtra(EXTRA_TASK_ID, 0)) {
                 case SyncMovieTask.TASK_ID:
                     syncResult = syncMovieData();
                     break;
             }
 
             if (intent.getBooleanExtra(EXTRA_NOTIFY, false))
-                notifyCaller(syncResult, intent.getIntExtra(EXTRA_JOD_ID, 0));
+                notifyCaller(syncResult, intent.getIntExtra(EXTRA_TASK_ID, 0));
         }
     }
 
@@ -56,7 +56,7 @@ public class SyncDataService extends IntentService {
         Intent broadCastIntent = success ? new Intent(ACTION_SYNC_COMPLETED) :
                 new Intent(ACTION_SYNC_FAILED);
 
-        broadCastIntent.putExtra(EXTRA_JOD_ID, jobId);
+        broadCastIntent.putExtra(EXTRA_TASK_ID, jobId);
         sendBroadcast(broadCastIntent);
     }
 

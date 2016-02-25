@@ -1,10 +1,9 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
+import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
-import com.manpdev.androidnanodegree.popularmov.movie.tasks.SyncMovieTask;
-import com.manpdev.androidnanodegree.popularmov.services.SyncDataService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieListFragment extends Fragment implements MovieListContract.PopularMovieListView, OnMoviePosterClick{
+public class MovieListFragment extends Fragment implements MovieListContract.PopularMovieListView,
+        OnMoviePosterClick, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private MovieSelectionListener mSelectionListener;
     private MovieListContract.PopularMovieListPresenter mPresenter;
@@ -28,16 +27,12 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     private RecyclerView mList;
     private MovieListPosterAdapter mMovieListAdapter;
 
-    private final static int sListenerId = 123;
-    private BroadcastReceiver mSyncReceiver;
     private boolean mLoadedData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SyncDataService.startSyncData(getActivity().getApplicationContext(), SyncMovieTask.TASK_ID, sListenerId);
-        this.mPresenter = new MovieList(this);
+        this.mPresenter = new MovieList(this, getLoaderManager());
     }
 
     @Override
@@ -55,50 +50,45 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
         this.mMovieListAdapter = new MovieListPosterAdapter(getContext(), new ArrayList<MovieModel>(), this);
         this.mList.setAdapter(this.mMovieListAdapter);
 
-        mPresenter.loadMovieList(getLoaderManager());
         return root;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try{
-            mSelectionListener = (MovieSelectionListener) context;
+    public void onStart() {
+        super.onStart();
+        if(!this.mLoadedData)
+            mPresenter.loadMovieList();
 
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(SyncDataService.ACTION_SYNC_COMPLETED);
-            this.mSyncReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    if(!mLoadedData && mPresenter != null)
-                        mPresenter.refreshMovieList(MovieListFragment.this.getLoaderManager());
-                }
-            };
+        Preferences.registerPreferencesListener(getContext(), this);
 
-            context.registerReceiver(mSyncReceiver, filter);
-
-        }catch (Exception ex){
-            ex.printStackTrace();
-            throw ex;
-        }
+        mSelectionListener = (MovieSelectionListener) getActivity();
+        mPresenter.registerSyncDataListener();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onStop() {
+        super.onStop();
+
+        Preferences.unregisterPreferencesListener(getContext(), this);
+
         mSelectionListener = null;
-        getActivity().unregisterReceiver(mSyncReceiver);
+        mPresenter.unregisterSyncDataListener();
     }
 
     @Override
-    public void showPosterList(List<MovieModel> list) {
+    public void showMovieList(List<MovieModel> list) {
         if(list != null && list.size() > 0){
-            mLoadedData = true;
-            getActivity().unregisterReceiver(mSyncReceiver);
+            this.mLoadedData = true;
+            this.mMovieListAdapter.setmMovieList(list);
+            this.mMovieListAdapter.notifyDataSetChanged();
+        }else{
+            mPresenter.startSyncData();
         }
+    }
 
-        this.mMovieListAdapter = new MovieListPosterAdapter(getContext(), list, this);
-        this.mList.swapAdapter(mMovieListAdapter, false);
+    @Override
+    public void showMessage(int resourceId) {
+        Snackbar.make(mList, getString(resourceId), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -107,7 +97,9 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
             mSelectionListener.onSelectMovie(movieId);
     }
 
-    public interface MovieSelectionListener {
-        void onSelectMovie(int id);
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(Preferences.SELECTED_SORTING_OPTION))
+            mPresenter.startSyncData();
     }
 }

@@ -29,6 +29,10 @@ public class MovieListPosterAdapter extends RecyclerView.Adapter<MovieListPoster
         this.mItemClickListener = itemClickListener;
     }
 
+    public void setmMovieList(List<MovieModel> mMovieList) {
+        this.mMovieList = mMovieList;
+    }
+
     @Override
     public MovieListPosterAdapter.PosterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 

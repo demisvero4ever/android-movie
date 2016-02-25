@@ -1,5 +1,9 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -11,6 +15,8 @@ import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MoviesProvider;
+import com.manpdev.androidnanodegree.popularmov.movie.tasks.SyncMovieTask;
+import com.manpdev.androidnanodegree.popularmov.services.SyncDataService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +34,52 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
     private MovieListContract.PopularMovieListView mView;
     private String mPosterApiPath;
-    public static final int MOVIE_LOADER_ID = 214;
 
-    public MovieList( MovieListContract.PopularMovieListView view) {
+    private BroadcastReceiver mDataSyncReceiver;
+
+    private static final int MOVIE_LOADER_ID = 214;
+    private LoaderManager mLoadManager;
+
+    public MovieList(MovieListContract.PopularMovieListView view, LoaderManager loaderManager) {
         this.mView = view;
+        this.mLoadManager = loaderManager;
         this.mPosterApiPath = view.getContext().getString(R.string.movie_db_poster_api_url);
     }
 
     @Override
-    public void loadMovieList(LoaderManager loaderManager) {
-        loaderManager.initLoader(MOVIE_LOADER_ID, null, this);
+    public void loadMovieList() {
+        mLoadManager.initLoader(MOVIE_LOADER_ID, null, this);
     }
 
     @Override
-    public void refreshMovieList(LoaderManager loaderManager) {
-        loaderManager.restartLoader(MOVIE_LOADER_ID, null, this);
+    public void refreshMovieList() {
+        mLoadManager.restartLoader(MOVIE_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void startSyncData() {
+        SyncDataService.startSyncData(mView.getContext(), SyncMovieTask.TASK_ID, true);
+    }
+
+    @Override
+    public void registerSyncDataListener() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SyncDataService.ACTION_SYNC_COMPLETED);
+        filter.addAction(SyncDataService.ACTION_SYNC_FAILED);
+
+        this.mDataSyncReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                handleSyncResult(intent);
+            }
+        };
+
+        mView.getContext().registerReceiver(mDataSyncReceiver, filter);
+    }
+
+    @Override
+    public void unregisterSyncDataListener() {
+        mView.getContext().unregisterReceiver(mDataSyncReceiver);
     }
 
     @Override
@@ -58,7 +95,7 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mView.showPosterList(buildMovieModelList(data));
+        mView.showMovieList(buildMovieModelList(data));
     }
 
     @Override
@@ -86,6 +123,18 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
         }
 
         return result;
+    }
+
+    private void handleSyncResult(Intent intent) {
+        if(intent.getIntExtra(SyncDataService.EXTRA_JOD_ID, 0) != SyncMovieTask.TASK_ID)
+            return;
+
+        if(intent.getAction().equals(SyncDataService.ACTION_SYNC_FAILED)) {
+            mView.showMessage(R.string.sync_data_failed);
+            return;
+        }
+
+        refreshMovieList();
     }
 
 }

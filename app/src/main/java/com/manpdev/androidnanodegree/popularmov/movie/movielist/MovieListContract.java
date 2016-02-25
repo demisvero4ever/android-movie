@@ -14,11 +14,16 @@ public interface MovieListContract {
 
     interface PopularMovieListView{
         Context getContext();
-        void showPosterList(List<MovieModel> list);
+        void showMovieList(List<MovieModel> list);
+        void showMessage(int resourceId);
     }
 
     interface PopularMovieListPresenter{
-        void loadMovieList(LoaderManager loaderManager);
-        void refreshMovieList(LoaderManager loaderManager);
+        void registerSyncDataListener();
+        void unregisterSyncDataListener();
+        void startSyncData();
+
+        void loadMovieList();
+        void refreshMovieList();
     }
 }

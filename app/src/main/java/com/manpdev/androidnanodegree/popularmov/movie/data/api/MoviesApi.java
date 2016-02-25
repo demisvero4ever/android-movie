@@ -16,15 +16,6 @@ import retrofit.http.Query;
  */
 public interface MoviesApi {
 
-    @Retention(RetentionPolicy.SOURCE)
-    @StringDef({
-            SORT_POPULARITY_DESC,
-            SORT_VOTE_AVERAGE_DESC
-    })
-    @interface SortingOptions {}
-    String SORT_POPULARITY_DESC = "popularity.desc";
-    String SORT_VOTE_AVERAGE_DESC = "vote_average.desc";
-
     @GET("3/discover/movie")
     Call<MovieWrapperModel> getSortedMovieList(@Query("api_key") String apiKey, @Query("sort_by") String sortBy);
 }

@@ -1,8 +1,8 @@
 package com.manpdev.androidnanodegree.popularmov.services;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 import com.manpdev.androidnanodegree.popularmov.movie.tasks.SyncMovieTask;
 
@@ -15,47 +15,52 @@ import com.manpdev.androidnanodegree.popularmov.movie.tasks.SyncMovieTask;
 public class SyncDataService extends IntentService {
     private static final String ACTION_SYNC_DATA = "com.manpdev.androidnanodegree.popularmov.services.action.syncdata";
 
-    private static final String EXTRA_JOD_ID = "com.manpdev.androidnanodegree.popularmov.services.extra.jobid";
-    public static final String EXTRA_LISTENER_ID = "com.manpdev.androidnanodegree.popularmov.services.extra.listenerid";
+    public static final String EXTRA_JOD_ID = "com.manpdev.androidnanodegree.popularmov.services.extra.jobid";
+    private static final String EXTRA_NOTIFY = "com.manpdev.androidnanodegree.popularmov.services.extra.notify";
 
     public static final String ACTION_SYNC_COMPLETED = "com.manpdev.androidnanodegree.popularmov.services.action.sync_completed";
+    public static final String ACTION_SYNC_FAILED = "com.manpdev.androidnanodegree.popularmov.services.action.sync_failed";
 
     public SyncDataService() {
         super("SyncDataService");
     }
 
-    public static void startSyncData(Context context, int jobId, int listenerId) {
+    public static void startSyncData(Context context, int jobId, boolean notify) {
         Intent intent = new Intent(context, SyncDataService.class);
         intent.setAction(ACTION_SYNC_DATA);
         intent.putExtra(EXTRA_JOD_ID, jobId);
-        intent.putExtra(EXTRA_LISTENER_ID, listenerId);
+        intent.putExtra(EXTRA_NOTIFY, notify);
         context.startService(intent);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            if(!ACTION_SYNC_DATA.equals(intent.getAction()))
+            if (!ACTION_SYNC_DATA.equals(intent.getAction()))
                 return;
 
-            switch (intent.getIntExtra(EXTRA_JOD_ID, 0)){
+            boolean syncResult = false;
+
+            switch (intent.getIntExtra(EXTRA_JOD_ID, 0)) {
                 case SyncMovieTask.TASK_ID:
-                    syncMovieData();
-                break;
+                    syncResult = syncMovieData();
+                    break;
             }
 
-            if(intent.getIntExtra(EXTRA_LISTENER_ID, 0) != 0)
-                notifyCaller(intent.getIntExtra(EXTRA_LISTENER_ID, 0));
+            if (intent.getBooleanExtra(EXTRA_NOTIFY, false))
+                notifyCaller(syncResult, intent.getIntExtra(EXTRA_JOD_ID, 0));
         }
     }
 
-    private void notifyCaller(int listenerId) {
-        Intent broadCastIntent = new Intent(ACTION_SYNC_COMPLETED);
-        broadCastIntent.putExtra(EXTRA_LISTENER_ID, listenerId);
+    private void notifyCaller(boolean success, int jobId) {
+        Intent broadCastIntent = success ? new Intent(ACTION_SYNC_COMPLETED) :
+                new Intent(ACTION_SYNC_FAILED);
+
+        broadCastIntent.putExtra(EXTRA_JOD_ID, jobId);
         sendBroadcast(broadCastIntent);
     }
 
-    private void syncMovieData() {
-        new SyncMovieTask(getApplicationContext()).syncData();
+    private boolean syncMovieData() {
+        return new SyncMovieTask(getApplicationContext()).syncData();
     }
 }

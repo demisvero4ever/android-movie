@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/op_refresh_list"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/op_refresh_list_label" />
+
+    <group android:id="@+id/group_sort_by" android:checkableBehavior="single">
+        <item android:id="@+id/op_sort_by_popularity"
+            android:title="@string/op_sort_by_popularity_label" />
+        <item android:id="@+id/op_sort_by_vote_avg"
+            android:title="@string/op_sort_by_vote_avg_label" />
+    </group>
+</menu>

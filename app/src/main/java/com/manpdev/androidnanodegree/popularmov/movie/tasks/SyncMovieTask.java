@@ -4,14 +4,12 @@ import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.OperationApplicationException;
-import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.api.MovieApiRequester;
-import com.manpdev.androidnanodegree.popularmov.movie.data.api.MoviesApi;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
@@ -40,7 +38,7 @@ public class SyncMovieTask {
     public boolean syncData() {
         MovieApiRequester apiRequester = MovieApiRequester.getInstance(mContext);
         try {
-            MovieWrapperModel model = apiRequester.getSortedMovieList(getSortingOption());
+            MovieWrapperModel model = apiRequester.getSortedMovieList(Preferences.getSortingOption(mContext));
 
             if (model == null || model.getResults() == null) {
                 Log.w(TAG, "syncData: Null model");
@@ -53,21 +51,6 @@ public class SyncMovieTask {
         } catch (Throwable e) {
             Log.e(TAG, "syncData: ", e);
             return false;
-        }
-    }
-
-    @MoviesApi.SortingOptions
-    private String getSortingOption() {
-        SharedPreferences preferences = mContext.getSharedPreferences(Preferences.COLLECTION_NAME, Context.MODE_PRIVATE);
-        switch (preferences.getString(Preferences.SELECTED_SORTING_OPTION, MoviesApi.SORT_POPULARITY_DESC)) {
-            case MoviesApi.SORT_POPULARITY_DESC:
-                return MoviesApi.SORT_POPULARITY_DESC;
-
-            case MoviesApi.SORT_VOTE_AVERAGE_DESC:
-                return MoviesApi.SORT_VOTE_AVERAGE_DESC;
-
-            default:
-                return MoviesApi.SORT_POPULARITY_DESC;
         }
     }
 

@@ -3,6 +3,7 @@ package com.manpdev.androidnanodegree.popularmov.movie.data.api;
 import android.content.Context;
 
 import com.manpdev.androidnanodegree.popularmov.R;
+import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
 
 import java.util.Locale;
@@ -38,7 +39,7 @@ public class MovieApiRequester {
         this.mApiKey = context.getResources().getString(R.string.movie_api_key);
     }
 
-    public MovieWrapperModel getSortedMovieList(@MoviesApi.SortingOptions String sortOption) throws Throwable {
+    public MovieWrapperModel getSortedMovieList(@Preferences.SortingOptions String sortOption) throws Throwable {
         try {
             Response<MovieWrapperModel> response = this.mMovieApi.getSortedMovieList(this.mApiKey, sortOption).execute();
 

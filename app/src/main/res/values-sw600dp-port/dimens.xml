@@ -1,0 +1,6 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="main_title_frame_height">200dp</dimen>
+
+</resources>

@@ -1,13 +1,80 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".movie.movielist.MovieListFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <GridLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment2" />
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        tools:context=".movie.movielist.MovieListFragment">
 
-</FrameLayout>
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_title_frame_height"
+            android:layout_columnSpan="2"
+            android:background="@color/colorPrimaryDark"
+            android:padding="@dimen/main_title_frame_padding">
+
+            <TextView
+                android:id="@+id/tv_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Title of the movie."
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textSize="@dimen/main_title_font_size"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_movie_poster"
+            android:layout_width="@dimen/movie_thumb_with"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_double"
+            android:layout_marginTop="@dimen/margin_double"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/movie_poster_description"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_no_poster_available" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_double"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_movie_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_double"
+                android:text="2016"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/main_title_font_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_vote_avg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_double"
+                android:text="8.3/10"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_movie_synopsis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_margin="@dimen/margin_default"
+            android:text="This is the synopsis of this movie. This is the synopsis of this movie This is the synopsis of this movie This is the synopsis of this movie"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </GridLayout>
+</ScrollView>

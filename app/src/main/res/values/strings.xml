@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">PopularMov</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hello_blank_fragment2">Hello blank 2 fragment</string>
+
     <string name="sync_data_failed">Sync data failed.</string>
     <string name="op_refresh_list_label">Refresh</string>
     <string name="op_sort_by_popularity_label">Most Popular</string>
-    <string name="op_sort_by_vote_avg_label">Best Rated</string>
+    <string name="op_sort_by_vote_avg_label">Highest Rated</string>
+    <string name="movie_poster_description">movie poster</string>
 </resources>

@@ -5,13 +5,12 @@
 
     <dimen name="main_title_frame_height">100dp</dimen>
     <dimen name="main_title_frame_padding">20dp</dimen>
-
     <dimen name="main_title_font_size">26sp</dimen>
 
-    <dimen name="movie_thumb_with">120dp</dimen>
+    <dimen name="movie_thumb_with">160dp</dimen>
 
-    <dimen name="margin_double">32dp</dimen>
-    <dimen name="margin_default">16dp</dimen>
-    <dimen name="margin_half">8dp</dimen>
-    <dimen name="margin_quarter">4dp</dimen>
+    <dimen name="dimen_double">32dp</dimen>
+    <dimen name="dimen_default">16dp</dimen>
+    <dimen name="dimen_half">8dp</dimen>
+    <dimen name="dimen_quarter">4dp</dimen>
 </resources>

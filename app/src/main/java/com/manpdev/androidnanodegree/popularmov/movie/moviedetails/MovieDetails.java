@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.R;
@@ -92,7 +93,8 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter,
 
         model.setId(data.getInt(0));
         model.setTitle(data.getString(1));
-        model.setPosterPath(mPosterApiPath + data.getString(2));
+        if(!TextUtils.isEmpty(data.getString(2)))
+            model.setPosterPath(mPosterApiPath + data.getString(2));
 
         try {
             Calendar c = Calendar.getInstance();

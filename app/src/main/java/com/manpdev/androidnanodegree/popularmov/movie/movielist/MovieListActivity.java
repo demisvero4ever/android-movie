@@ -86,7 +86,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
 
     private void startMovieDetailActivity(int id) {
         Bundle arg = new Bundle();
-        arg.putInt(MovieDetailsFragment.MOVIE_ID_EXTRA, id);
+        arg.putInt(MovieSelectionListener.MOVIE_ID_EXTRA, id);
 
         Intent intent = new Intent(MovieListActivity.this, MovieDetailsActivity.class);
         intent.putExtras(arg);
@@ -96,7 +96,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
 
     private void updateMovieDetailFragment(int id) {
         Bundle arg = new Bundle();
-        arg.putInt(MovieDetailsFragment.MOVIE_ID_EXTRA, id);
+        arg.putInt(MovieSelectionListener.MOVIE_ID_EXTRA, id);
 
         MovieDetailsFragment fragment = new MovieDetailsFragment();
         fragment.setArguments(arg);

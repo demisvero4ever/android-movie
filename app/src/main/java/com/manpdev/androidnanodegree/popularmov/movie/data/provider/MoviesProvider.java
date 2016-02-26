@@ -46,16 +46,16 @@ public class MoviesProvider extends ContentProvider{
         SQLiteDatabase database = mMovieDatabase.getReadableDatabase();
         Cursor result;
 
+        String[] columns =  (projection == null) ? MovieContract.MovieEntry.COLUMNS_ALL : projection;
+
         switch (sUriMatcher.match(uri)){
             case URI_MATCH_MOVIE:
-                String[] columns =  (projection == null) ? MovieContract.MovieEntry.COLUMNS_ALL : projection;
-
                 result = database.query(MovieContract.MovieEntry.TABLE_NAME, columns,
                                         selection, selectionArgs, null, null, sortOrder);
                 break;
 
             case URI_MATCH_MOVIE_ID:
-                result = database.query(MovieContract.MovieEntry.TABLE_NAME, MovieContract.MovieEntry.COLUMNS_ALL,
+                result = database.query(MovieContract.MovieEntry.TABLE_NAME, columns,
                         MovieContract.MovieEntry._ID + "=? ", new String[]{uri.getLastPathSegment()}, null, null, null);
                 break;
             default:

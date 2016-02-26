@@ -10,9 +10,13 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
+
+    applicationVariants.all { variant ->
+        variant.buildConfigField "String", "MOVIE_API_KEY", rootProject.ext.movieApiKey
+    }
+
     buildTypes {
         release {
             minifyEnabled false

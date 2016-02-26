@@ -2,6 +2,7 @@ package com.manpdev.androidnanodegree.popularmov.movie.data.api;
 
 import android.content.Context;
 
+import com.manpdev.androidnanodegree.popularmov.BuildConfig;
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
@@ -36,7 +37,7 @@ public class MovieApiRequester {
                 .build();
 
         this.mMovieApi = retrofit.create(MoviesApi.class);
-        this.mApiKey = context.getResources().getString(R.string.movie_api_key);
+        this.mApiKey = BuildConfig.MOVIE_API_KEY;
     }
 
     public MovieWrapperModel getSortedMovieList(@Preferences.SortingOptions String sortOption) throws Throwable {

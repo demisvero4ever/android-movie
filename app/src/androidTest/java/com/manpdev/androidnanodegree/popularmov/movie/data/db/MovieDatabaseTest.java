@@ -6,10 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 
 import org.junit.runner.RunWith;
+
+import java.util.Locale;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -42,16 +45,6 @@ public class MovieDatabaseTest {
     }
 
     @org.junit.Test
-    public void blankDbTest() throws Exception {
-        Cursor cursor = database.query(false, MovieContract.MovieEntry.TABLE_NAME,
-                MOVIE_PROJECTION, null, null, null, null, null, null);
-
-        assertEquals(0, cursor.getCount());
-
-        cursor.close();
-    }
-
-    @org.junit.Test
     public void testInsertRow() throws Exception {
         this.database.beginTransaction();
 
@@ -79,10 +72,20 @@ public class MovieDatabaseTest {
             assertNotSame(0, id);
 
             Cursor cursor = this.database.query(false, MovieContract.MovieEntry.TABLE_NAME,
-                    MOVIE_PROJECTION, null, null, null, null, null, null);
+                    MOVIE_PROJECTION,
+                    String.format(Locale.US, "%s = %s", MovieContract.MovieEntry.COLUMN_CLOUD_ID,
+                            getFakeMovieData().getAsString(MovieContract.MovieEntry.COLUMN_CLOUD_ID)),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+            );
 
             assertEquals(true, cursor.moveToFirst());
-            assertEquals("poster.jpgg", cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)));
+            assertEquals(getFakeMovieData().getAsString(MovieContract.MovieEntry.COLUMN_POSTER),
+                    cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)));
+
             cursor.close();
         }catch (Exception ex){
             fail(ex.getMessage());
@@ -101,6 +104,7 @@ public class MovieDatabaseTest {
         movieContent.put(MovieContract.MovieEntry.COLUMN_SYNOPSIS, "This is the synopsis");
         movieContent.put(MovieContract.MovieEntry.COLUMN_TITLE, "This is a title");
         movieContent.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, 6.7);
+        movieContent.put(MovieContract.MovieEntry.COLUMN_POPULARITY, 6.7);
         return movieContent;
     }
 }

@@ -90,8 +90,8 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     }
 
     @Override
-    public void onMoviePosterSelected(int movieId) {
+    public void onMoviePosterSelected(View view, int movieId) {
         if(mSelectionListener != null)
-            mSelectionListener.onSelectMovie(movieId);
+            mSelectionListener.onSelectMovie(view, movieId);
     }
 }

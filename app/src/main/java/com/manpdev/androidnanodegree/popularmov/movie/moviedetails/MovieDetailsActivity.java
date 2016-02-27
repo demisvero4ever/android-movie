@@ -1,9 +1,8 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails;
 
-import android.support.v4.app.NavUtils;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.manpdev.androidnanodegree.popularmov.R;
@@ -35,7 +34,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                super.onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

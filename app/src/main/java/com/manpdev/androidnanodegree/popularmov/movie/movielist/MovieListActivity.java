@@ -1,8 +1,12 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +44,9 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
         if (mDetailFragmentContainer != null) {
             mTwoPanels = true;
         }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            initWindowsTransition();
     }
 
     @Override
@@ -101,24 +108,14 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     }
 
     @Override
-    public void onSelectMovie(int id) {
+    public void onSelectMovie(View v, int id) {
         mSelectedMovieId = id;
 
         if(mTwoPanels){
             updateMovieDetailFragment(mSelectedMovieId);
         }else{
-            startMovieDetailActivity(mSelectedMovieId);
+            startMovieDetailActivity(v, mSelectedMovieId);
         }
-    }
-
-    private void startMovieDetailActivity(int id) {
-        Bundle arg = new Bundle();
-        arg.putInt(MovieSelectionListener.EXTRA_MOVIE_ID, id);
-
-        Intent intent = new Intent(MovieListActivity.this, MovieDetailsActivity.class);
-        intent.putExtras(arg);
-
-        startActivity(intent);
     }
 
     private void updateMovieDetailFragment(int id) {
@@ -133,5 +130,26 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_movie_details_container, mDetailsFragment, MOVIE_DETAIL_TAG)
                 .commit();
+    }
+
+    private void startMovieDetailActivity(View v, int id) {
+        Bundle arg = new Bundle();
+        arg.putInt(MovieSelectionListener.EXTRA_MOVIE_ID, id);
+
+        Intent intent = new Intent(MovieListActivity.this, MovieDetailsActivity.class);
+        intent.putExtras(arg);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(this, v, getString(R.string.movie_poster_resource));
+
+            startActivity(intent, options.toBundle());
+        }else
+            startActivity(intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void initWindowsTransition(){
+         getWindow().setExitTransition(new Explode());
     }
 }

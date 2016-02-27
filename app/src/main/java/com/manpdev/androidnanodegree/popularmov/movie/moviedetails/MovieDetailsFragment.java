@@ -1,7 +1,9 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +57,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         this.mVoteAvgTextView = (TextView) root.findViewById(R.id.tv_movie_vote_avg);
         this.mDateTextView = (TextView) root.findViewById(R.id.tv_movie_release_date);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            initTransitionElements();
+
         return root;
     }
 
@@ -99,4 +104,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         mVoteAvgTextView.setText(String.format(Locale.US, "%.2f/10", mMovie.getVoteAverage()));
         mDateTextView.setText(mMovie.getReleaseDate());
     }
+
+    private void initTransitionElements() {
+        ViewCompat.setTransitionName(this.mPosterImageView, getString(R.string.movie_poster_resource));
+    }
 }
+

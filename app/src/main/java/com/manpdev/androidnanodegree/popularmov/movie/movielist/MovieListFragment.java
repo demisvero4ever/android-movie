@@ -54,17 +54,16 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     @Override
     public void onStart() {
         super.onStart();
-        if(mList.getAdapter().getItemCount() == 0)
-            mPresenter.loadMovieList();
-
         mSelectionListener = (MovieSelectionListener) getActivity();
         mPresenter.registerListeners();
+
+        if(mList.getAdapter().getItemCount() == 0)
+            mPresenter.loadMovieList();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
         mSelectionListener = null;
         mPresenter.unregisterListener();
     }

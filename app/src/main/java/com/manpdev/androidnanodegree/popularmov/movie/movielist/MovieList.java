@@ -23,6 +23,7 @@ import com.manpdev.androidnanodegree.popularmov.services.SyncDataService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
@@ -176,9 +177,9 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
     public String getSortingString() {
         switch (Preferences.getSortingOption(mContext)){
             case Preferences.SORT_POPULARITY_DESC:
-                return MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
+                return String.format(Locale.US, "%s DESC", MovieContract.MovieEntry.COLUMN_POPULARITY);
             case Preferences.SORT_VOTE_AVERAGE_DESC:
-                return MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
+                return String.format(Locale.US, "%s DESC", MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE);
         }
         return "";
     }

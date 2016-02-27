@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
@@ -17,17 +19,33 @@ import com.manpdev.androidnanodegree.popularmov.services.SyncDataService;
 public class MovieListActivity extends AppCompatActivity implements MovieSelectionListener{
 
     private static final String MOVIE_DETAIL_TAG = "DETAIL_FRAGMENT";
+    public static final String STATE_MOVIE_ID = "::state_movie_id";
+
     private boolean mTwoPanels;
+    private int mMovieId;
+
+    private ViewGroup mDetailFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
-        if (findViewById(R.id.fragment_movie_details_container) != null) {
-            mTwoPanels = true;
-            updateMovieDetailFragment(0);
+        if(savedInstanceState != null) {
+            mMovieId = savedInstanceState.getInt(STATE_MOVIE_ID);
         }
+
+        mDetailFragmentContainer = (ViewGroup) findViewById(R.id.fragment_movie_details_container);
+
+        if (mDetailFragmentContainer != null) {
+            mTwoPanels = true;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_MOVIE_ID, mMovieId);
     }
 
     @Override
@@ -71,22 +89,31 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mTwoPanels)
+            updateMovieDetailFragment(mMovieId);
+    }
+
     private void refreshData() {
         SyncDataService.startSyncData(this, SyncMovieTask.TASK_ID, true);
     }
 
     @Override
     public void onSelectMovie(int id) {
+        mMovieId = id;
+
         if(mTwoPanels){
-            updateMovieDetailFragment(id);
+            updateMovieDetailFragment(mMovieId);
         }else{
-            startMovieDetailActivity(id);
+            startMovieDetailActivity(mMovieId);
         }
     }
 
     private void startMovieDetailActivity(int id) {
         Bundle arg = new Bundle();
-        arg.putInt(MovieSelectionListener.MOVIE_ID_EXTRA, id);
+        arg.putInt(MovieSelectionListener.EXTRA_MOVIE_ID, id);
 
         Intent intent = new Intent(MovieListActivity.this, MovieDetailsActivity.class);
         intent.putExtras(arg);
@@ -95,14 +122,16 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     }
 
     private void updateMovieDetailFragment(int id) {
-        Bundle arg = new Bundle();
-        arg.putInt(MovieSelectionListener.MOVIE_ID_EXTRA, id);
+        mDetailFragmentContainer.setVisibility(View.VISIBLE);
 
-        MovieDetailsFragment fragment = new MovieDetailsFragment();
-        fragment.setArguments(arg);
+        Bundle arg = new Bundle();
+        arg.putInt(MovieSelectionListener.EXTRA_MOVIE_ID, id);
+
+        MovieDetailsFragment mDetailsFragment = new MovieDetailsFragment();
+        mDetailsFragment.setArguments(arg);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_movie_details_container, fragment, MOVIE_DETAIL_TAG)
+                .replace(R.id.fragment_movie_details_container, mDetailsFragment, MOVIE_DETAIL_TAG)
                 .commit();
     }
 }

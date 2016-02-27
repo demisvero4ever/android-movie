@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private int mMovieId;
     private MovieModel mMovie;
 
+    private FrameLayout mTitleContainer;
     private ImageView mPosterImageView;
     private TextView mTitleTextView;
     private TextView mSynopsisTextView;
@@ -38,7 +40,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         super.onCreate(savedInstanceState);
         this.mPresenter = new MovieDetails(getActivity().getApplicationContext(), this, getLoaderManager());
 
-        this.mMovieId = getArguments().getInt(MovieSelectionListener.MOVIE_ID_EXTRA);
+        this.mMovieId = getArguments().getInt(MovieSelectionListener.EXTRA_MOVIE_ID);
     }
 
     @Override
@@ -46,6 +48,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
+        this.mTitleContainer = (FrameLayout) root.findViewById(R.id.fl_title_container);
         this.mPosterImageView = (ImageView) root.findViewById(R.id.iv_movie_poster);
         this.mTitleTextView = (TextView) root.findViewById(R.id.tv_movie_title);
         this.mSynopsisTextView = (TextView) root.findViewById(R.id.tv_movie_synopsis);
@@ -76,16 +79,19 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
     @Override
     public void showMovieDetails(MovieModel movie) {
-        Log.d(TAG, "showMovieDetails() called with: " + "movie = [" + movie + "]");
-        if (movie == null)
-            return;
+        Log.d(TAG, "showMovieDetails() called with: " + "movie = [" + movie.getTitle() + "]");
 
         this.mMovie = movie;
+        this.mTitleContainer.setVisibility(View.VISIBLE);
 
         if (!TextUtils.isEmpty(mMovie.getPosterPath()))
             Picasso.with(getContext())
                     .load(mMovie.getPosterPath())
                     .error(R.drawable.ic_no_poster_available)
+                    .into(mPosterImageView);
+        else
+            Picasso.with(getContext())
+                    .load(R.drawable.ic_no_poster_available)
                     .into(mPosterImageView);
 
         mTitleTextView.setText(mMovie.getTitle());

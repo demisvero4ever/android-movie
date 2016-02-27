@@ -10,12 +10,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.R;
+import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MoviesProvider;
-import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieSelectionListener;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
@@ -35,6 +36,7 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter,
     };
 
     private final String mPosterApiPath;
+    private int mMovieId;
 
     private Context mContext;
 
@@ -52,10 +54,9 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter,
 
     @Override
     public void loadMovieDetails(int movieId) {
-        Bundle args = new Bundle();
-        args.putInt(MovieSelectionListener.MOVIE_ID_EXTRA, movieId);
+        this.mMovieId = movieId;
 
-        mLoadManager.initLoader(MOVIE_LOADER_ID, args, this);
+        mLoadManager.initLoader(MOVIE_LOADER_ID, null, this);
     }
 
     @Override
@@ -65,19 +66,34 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter,
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(mContext,
-                MovieContract.MovieEntry.buildUriForMovieById(MoviesProvider.sAUTHORITY,
-                        args.getInt(MovieSelectionListener.MOVIE_ID_EXTRA)),
-                DATA_PROJECTION,
-                null,
-                null,
-                null
-        );
+        if (mMovieId == 0)
+            return new CursorLoader(mContext,
+                    MovieContract.MovieEntry.baseURI(MoviesProvider.sAUTHORITY),
+                    DATA_PROJECTION,
+                    null,
+                    null,
+                    getSortingString()
+            );
+        else
+            return new CursorLoader(mContext,
+                    MovieContract.MovieEntry.buildUriForMovieById(MoviesProvider.sAUTHORITY,
+                            mMovieId),
+                    DATA_PROJECTION,
+                    null,
+                    null,
+                    getSortingString()
+            );
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mView.showMovieDetails(buildMovie(data));
+        if (data.getCount() > 0) {
+            mView.showMovieDetails(buildMovie(data));
+
+        }else if(mMovieId != 0) {
+            mMovieId = 0;
+            mLoadManager.restartLoader(MOVIE_LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -86,21 +102,21 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter,
     }
 
     private MovieModel buildMovie(Cursor data) {
-        if(!data.moveToFirst())
+        if (!data.moveToFirst())
             return null;
 
         MovieModel model = new MovieModel();
 
         model.setId(data.getInt(0));
         model.setTitle(data.getString(1));
-        if(!TextUtils.isEmpty(data.getString(2)))
+        if (!TextUtils.isEmpty(data.getString(2)))
             model.setPosterPath(mPosterApiPath + data.getString(2));
 
         try {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(data.getLong(3));
             model.setReleaseDate(String.valueOf(c.get(Calendar.YEAR)));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e(TAG, "buildMovie: ", ex);
             model.setReleaseDate("");
         }
@@ -109,5 +125,15 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter,
         model.setOverview(data.getString(5));
 
         return model;
+    }
+
+    public String getSortingString() {
+        switch (Preferences.getSortingOption(mContext)){
+            case Preferences.SORT_POPULARITY_DESC:
+                return String.format(Locale.US, "%s DESC", MovieContract.MovieEntry.COLUMN_POPULARITY);
+            case Preferences.SORT_VOTE_AVERAGE_DESC:
+                return String.format(Locale.US, "%s DESC", MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE);
+        }
+        return "";
     }
 }

@@ -22,7 +22,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     public static final String STATE_MOVIE_ID = "::state_movie_id";
 
     private boolean mTwoPanels;
-    private int mMovieId;
+    private int mSelectedMovieId;
 
     private ViewGroup mDetailFragmentContainer;
 
@@ -32,7 +32,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
         setContentView(R.layout.activity_movie_list);
 
         if(savedInstanceState != null) {
-            mMovieId = savedInstanceState.getInt(STATE_MOVIE_ID);
+            mSelectedMovieId = savedInstanceState.getInt(STATE_MOVIE_ID);
         }
 
         mDetailFragmentContainer = (ViewGroup) findViewById(R.id.fragment_movie_details_container);
@@ -45,7 +45,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_MOVIE_ID, mMovieId);
+        outState.putInt(STATE_MOVIE_ID, mSelectedMovieId);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     protected void onStart() {
         super.onStart();
         if(mTwoPanels)
-            updateMovieDetailFragment(mMovieId);
+            updateMovieDetailFragment(mSelectedMovieId);
     }
 
     private void refreshData() {
@@ -102,12 +102,12 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
 
     @Override
     public void onSelectMovie(int id) {
-        mMovieId = id;
+        mSelectedMovieId = id;
 
         if(mTwoPanels){
-            updateMovieDetailFragment(mMovieId);
+            updateMovieDetailFragment(mSelectedMovieId);
         }else{
-            startMovieDetailActivity(mMovieId);
+            startMovieDetailActivity(mSelectedMovieId);
         }
     }
 

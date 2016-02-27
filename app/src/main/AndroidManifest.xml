@@ -17,11 +17,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".movie.moviedetails.MovieDetailsActivity" />
+        <activity android:name=".movie.moviedetails.MovieDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".movie.movielist.MovieListActivity" />
+        </activity>
 
         <service
             android:name=".services.SyncDataService"
-            android:exported="false"></service>
+            android:exported="false"/>
 
         <provider
             android:authorities="com.manpdev.androidnanodegree.popularmov.movie"

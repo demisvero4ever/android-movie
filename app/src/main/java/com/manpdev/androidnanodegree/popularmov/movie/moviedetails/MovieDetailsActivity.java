@@ -1,7 +1,10 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails;
 
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 
@@ -17,6 +20,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             updateMovieDetailFragment(getIntent().getExtras());
         }
+
+        ActionBar aBar = getSupportActionBar();
+        if(aBar != null) {
+            aBar.setTitle(R.string.movie_details_activity_title);
+            aBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateMovieDetailFragment(Bundle arg) {

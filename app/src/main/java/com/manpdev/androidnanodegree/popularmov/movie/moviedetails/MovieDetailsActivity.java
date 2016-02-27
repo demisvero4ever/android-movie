@@ -15,6 +15,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getResources().getBoolean(R.bool.movie_multipane_mode))
+            finish();
+
         setContentView(R.layout.activity_movie_details);
 
         if(savedInstanceState == null){

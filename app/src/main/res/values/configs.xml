@@ -4,5 +4,6 @@
     <string name="movie_db_poster_api_url">http://image.tmdb.org/t/p/w185</string>
 
     <integer name="movie_list_columns">2</integer>
+    <bool name="movie_multipane_mode">false</bool>
 
 </resources>

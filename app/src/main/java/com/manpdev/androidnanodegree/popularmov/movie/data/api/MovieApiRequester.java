@@ -38,10 +38,7 @@ public class MovieApiRequester {
 
         this.mMovieApi = retrofit.create(MoviesApi.class);
 
-        if(!BuildConfig.MOVIE_API_KEY.equals("put_api_key_here"))
-            this.mApiKey = BuildConfig.MOVIE_API_KEY;
-        else
-            this.mApiKey = context.getString(R.string.movie_api_key);
+        this.mApiKey = BuildConfig.MOVIE_API_KEY;
     }
 
     public MovieWrapperModel getSortedMovieList(@Preferences.SortingOptions String sortOption) throws Throwable {

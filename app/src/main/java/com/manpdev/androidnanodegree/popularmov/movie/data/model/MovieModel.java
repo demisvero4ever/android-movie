@@ -12,9 +12,7 @@ public class MovieModel implements Parcelable{
     private String title;
     private String overview;
     private String poster_path;
-    private String backdrop_path;
     private String release_date;
-    private boolean video;
     private double vote_average;
     private double popularity;
 
@@ -26,9 +24,7 @@ public class MovieModel implements Parcelable{
         title = in.readString();
         overview = in.readString();
         poster_path = in.readString();
-        backdrop_path = in.readString();
         release_date = in.readString();
-        video = in.readByte() != 0;
         vote_average = in.readDouble();
         popularity = in.readDouble();
     }
@@ -39,9 +35,7 @@ public class MovieModel implements Parcelable{
         dest.writeString(title);
         dest.writeString(overview);
         dest.writeString(poster_path);
-        dest.writeString(backdrop_path);
         dest.writeString(release_date);
-        dest.writeByte((byte) (video ? 1 : 0));
         dest.writeDouble(vote_average);
         dest.writeDouble(popularity);
     }
@@ -63,16 +57,8 @@ public class MovieModel implements Parcelable{
         return poster_path;
     }
 
-    public String getBackdropPath() {
-        return backdrop_path;
-    }
-
     public String getReleaseDate() {
         return release_date;
-    }
-
-    public boolean isVideo() {
-        return video;
     }
 
     public double getVoteAverage() {
@@ -99,16 +85,8 @@ public class MovieModel implements Parcelable{
         this.poster_path = poster_path;
     }
 
-    public void setBackdropPath(String backdrop_path) {
-        this.backdrop_path = backdrop_path;
-    }
-
     public void setReleaseDate(String release_date) {
         this.release_date = release_date;
-    }
-
-    public void setVideo(boolean video) {
-        this.video = video;
     }
 
     public void setVoteAverage(double vote_average) {

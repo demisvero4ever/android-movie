@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +29,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private int mMovieId;
     private MovieModel mMovie;
 
-    private FrameLayout mTitleContainer;
+    private ViewGroup mTitleContainer;
     private ImageView mPosterImageView;
     private TextView mTitleTextView;
     private TextView mSynopsisTextView;
@@ -50,7 +50,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
-        this.mTitleContainer = (FrameLayout) root.findViewById(R.id.fl_title_container);
+        this.mTitleContainer = (ViewGroup) root.findViewById(R.id.fl_title_container);
+        this.mTitleContainer.setY(-1 * getResources().getDimension(R.dimen.main_title_frame_height));
         this.mPosterImageView = (ImageView) root.findViewById(R.id.iv_movie_poster);
         this.mTitleTextView = (TextView) root.findViewById(R.id.tv_movie_title);
         this.mSynopsisTextView = (TextView) root.findViewById(R.id.tv_movie_synopsis);
@@ -88,6 +89,11 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
         this.mMovie = movie;
         this.mTitleContainer.setVisibility(View.VISIBLE);
+        this.mTitleContainer.animate()
+                .setInterpolator(new AccelerateInterpolator())
+                .translationY(0)
+                .setStartDelay(20)
+                .setListener(null);
 
         if (!TextUtils.isEmpty(mMovie.getPosterPath()))
             Picasso.with(getContext())

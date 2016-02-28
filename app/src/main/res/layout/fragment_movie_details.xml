@@ -1,6 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".movie.moviedetails.MovieDetailsActivity">
 
     <GridLayout
         xmlns:tools="http://schemas.android.com/tools"
@@ -9,13 +11,13 @@
         android:columnCount="2"
         tools:context=".movie.movielist.MovieListFragment">
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/fl_title_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/main_title_frame_height"
             android:layout_columnSpan="2"
-            android:background="@color/colorPrimaryDark"
-            android:visibility="invisible"
+            android:background="@color/colorPrimary"
+            android:visibility="gone"
             android:paddingLeft="@dimen/main_title_frame_padding"
             android:paddingRight="@dimen/main_title_frame_padding"
             android:paddingBottom="@dimen/main_title_frame_padding"
@@ -33,7 +35,7 @@
                 android:textStyle="bold"
                 android:gravity="fill" />
 
-        </FrameLayout>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_movie_poster"
@@ -82,6 +84,5 @@
             tools:text="This is the synopsis of this movie. This is the synopsis of this movie This is the synopsis of this movie This is the synopsis of this movie"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="italic" />
-
     </GridLayout>
 </ScrollView>

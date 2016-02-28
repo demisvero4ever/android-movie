@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Visibility;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -150,6 +151,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initWindowsTransition(){
-         getWindow().setExitTransition(new Explode());
+         getWindow().setExitTransition(new Fade(Visibility.MODE_OUT));
     }
 }

@@ -15,8 +15,11 @@
             android:layout_height="@dimen/main_title_frame_height"
             android:layout_columnSpan="2"
             android:background="@color/colorPrimaryDark"
-            android:padding="@dimen/main_title_frame_padding"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:paddingLeft="@dimen/main_title_frame_padding"
+            android:paddingRight="@dimen/main_title_frame_padding"
+            android:paddingBottom="@dimen/main_title_frame_padding"
+            android:paddingTop="@dimen/dimen_default">
 
             <TextView
                 android:id="@+id/tv_movie_title"
@@ -27,7 +30,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="@dimen/main_title_font_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="fill" />
 
         </FrameLayout>
 

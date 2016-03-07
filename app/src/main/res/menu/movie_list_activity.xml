@@ -10,20 +10,24 @@
     <item
         android:id="@+id/file"
         android:icon="@drawable/ic_sort_white_24dp"
-        android:title="Sort"
+        android:title="@string/selection_sub_menu_title"
         app:showAsAction="ifRoom|withText">
         <menu>
             <group
                 android:id="@+id/group_sort_by"
                 android:checkableBehavior="single">
                 <item
-                    android:id="@+id/op_sort_by_popularity"
-                    android:icon="@drawable/ic_whatshot_black_24dp"
-                    android:title="@string/op_sort_by_popularity_label" />
+                    android:id="@+id/op_select_favorites"
+                    android:icon="@drawable/ic_star_black_24dp"
+                    android:title="@string/op_select_favorite_label" />
                 <item
-                    android:id="@+id/op_sort_by_vote_avg"
+                    android:id="@+id/op_select_by_popularity"
+                    android:icon="@drawable/ic_whatshot_black_24dp"
+                    android:title="@string/op_select_by_popularity_label" />
+                <item
+                    android:id="@+id/op_select_by_vote_avg"
                     android:icon="@drawable/ic_poll_black_24dp"
-                    android:title="@string/op_sort_by_vote_avg_label" />
+                    android:title="@string/op_select_by_vote_avg_label" />
             </group>
         </menu>
     </item>

@@ -2,11 +2,22 @@ package com.manpdev.androidnanodegree.popularmov.movie.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
  */
 public class MovieModel implements Parcelable{
+
+    private static final String sPosterBasePath= "http://image.tmdb.org/t/p/w185";
+    public static String RElEASE_DATE_FORMAT = "yyyy-MM-dd";
 
     private int id;
     private String title;
@@ -54,7 +65,10 @@ public class MovieModel implements Parcelable{
     }
 
     public String getPosterPath() {
-        return poster_path;
+        if(!TextUtils.isEmpty(poster_path))
+            return sPosterBasePath + poster_path;
+        else
+            return poster_path;
     }
 
     public String getReleaseDate() {
@@ -95,6 +109,22 @@ public class MovieModel implements Parcelable{
 
     public void setPopularity(double popularity) {
         this.popularity = popularity;
+    }
+
+    public String getReleaseYear() {
+        if(TextUtils.isEmpty(release_date))
+            return "";
+
+        DateFormat df = new SimpleDateFormat(MovieModel.RElEASE_DATE_FORMAT, Locale.US);
+        Calendar c = Calendar.getInstance();
+
+        try {
+            c.setTime(df.parse(release_date));
+            return String.valueOf(c.get(Calendar.YEAR));
+
+        } catch (ParseException e) {
+            return "";
+        }
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {

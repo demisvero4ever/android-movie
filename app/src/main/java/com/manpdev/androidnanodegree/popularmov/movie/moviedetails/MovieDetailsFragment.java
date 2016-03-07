@@ -1,5 +1,6 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,19 +16,19 @@ import android.widget.TextView;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
+import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieListActivity;
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieSelectionListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.MovieDetailsView {
+public class MovieDetailsFragment extends Fragment {
 
     private static final String TAG = "MovieDetailsFragment";
+    private static final String MOVIE_STATE = "::movie_state";
 
-    private MovieDetailsContract.MovieDetailsPresenter mPresenter;
-
-    private int mMovieId;
     private MovieModel mMovie;
+    private boolean mTwoPanels;
 
     private ViewGroup mTitleContainer;
     private ImageView mPosterImageView;
@@ -36,13 +37,21 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private TextView mVoteAvgTextView;
     private TextView mDateTextView;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mPresenter = new MovieDetails(getActivity().getApplicationContext(), this, getLoaderManager());
+        if(getArguments() != null){
+            this.mMovie = getArguments().getParcelable(MovieSelectionListener.EXTRA_MOVIE);
+        }else if(savedInstanceState != null){
+            this.mMovie = savedInstanceState.getParcelable(MOVIE_STATE);
+        }
+    }
 
-        this.mMovieId = getArguments().getInt(MovieSelectionListener.EXTRA_MOVIE_ID);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getActivity() instanceof MovieListActivity)
+            mTwoPanels = true;
     }
 
     @Override
@@ -51,15 +60,16 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         View root = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
         this.mTitleContainer = (ViewGroup) root.findViewById(R.id.fl_title_container);
-        this.mTitleContainer.setY(-1 * getResources().getDimension(R.dimen.main_title_frame_height));
         this.mPosterImageView = (ImageView) root.findViewById(R.id.iv_movie_poster);
         this.mTitleTextView = (TextView) root.findViewById(R.id.tv_movie_title);
         this.mSynopsisTextView = (TextView) root.findViewById(R.id.tv_movie_synopsis);
         this.mVoteAvgTextView = (TextView) root.findViewById(R.id.tv_movie_vote_avg);
         this.mDateTextView = (TextView) root.findViewById(R.id.tv_movie_release_date);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (!mTwoPanels && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.mTitleContainer.setY(-1 * getResources().getDimension(R.dimen.main_title_frame_height));
             initTransitionElements();
+        }
 
         return root;
     }
@@ -67,33 +77,34 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onStart() {
         super.onStart();
-
-        if (mMovie == null)
-            mPresenter.loadMovieDetails(this.mMovieId);
+        if (mMovie != null && !mTwoPanels)
+            showMovieDetails();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mMovie != null)
+            outState.putParcelable(MOVIE_STATE, mMovie);
     }
 
-    @Override
-    public void onDestroy() {
-        mPresenter.dismissMovieDetails();
-        super.onDestroy();
-    }
-
-    @Override
-    public void showMovieDetails(MovieModel movie) {
-        Log.d(TAG, "showMovieDetails() called with: " + "movie = [" + movie.getTitle() + "]");
-
+    public void updateMovie(MovieModel movie){
         this.mMovie = movie;
+        showMovieDetails();
+    }
+
+    private void showMovieDetails() {
+        Log.d(TAG, "showMovieDetails() called with: " + "movie = [" + mMovie.getTitle() + "]");
+
         this.mTitleContainer.setVisibility(View.VISIBLE);
-        this.mTitleContainer.animate()
-                .setInterpolator(new AccelerateInterpolator())
-                .translationY(0)
-                .setStartDelay(20)
-                .setListener(null);
+
+        if (!mTwoPanels) {
+            this.mTitleContainer.animate()
+                    .setInterpolator(new AccelerateInterpolator())
+                    .translationY(0)
+                    .setStartDelay(20)
+                    .setListener(null);
+        }
 
         if (!TextUtils.isEmpty(mMovie.getPosterPath()))
             Picasso.with(getContext())
@@ -108,7 +119,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         mTitleTextView.setText(mMovie.getTitle());
         mSynopsisTextView.setText(mMovie.getOverview());
         mVoteAvgTextView.setText(String.format(Locale.US, "%.2f/10", mMovie.getVoteAverage()));
-        mDateTextView.setText(mMovie.getReleaseDate());
+        mDateTextView.setText(mMovie.getReleaseYear());
     }
 
     private void initTransitionElements() {

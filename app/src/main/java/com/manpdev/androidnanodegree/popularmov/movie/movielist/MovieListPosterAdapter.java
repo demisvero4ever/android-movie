@@ -48,7 +48,7 @@ public class MovieListPosterAdapter extends RecyclerView.Adapter<MovieListPoster
             mPicasso.load(mMovieList.get(position).getPosterPath()).error(R.drawable.ic_no_poster_available).into(holder.getPosterView());
         else
             mPicasso.load(R.drawable.ic_no_poster_available).into(holder.getPosterView());
-        holder.setMovieId(mMovieList.get(position).getId());
+        holder.setItemPosition(position);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MovieListPosterAdapter extends RecyclerView.Adapter<MovieListPoster
     public static class PosterViewHolder extends RecyclerView.ViewHolder{
         private ImageView mPoster;
         private OnMoviePosterClick mListener;
-        private int mMovieId;
+        private int mItemPosition;
 
         public PosterViewHolder(final View parent, OnMoviePosterClick listener) {
             super(parent);
@@ -72,7 +72,7 @@ public class MovieListPosterAdapter extends RecyclerView.Adapter<MovieListPoster
                 @Override
                 public void onClick(View v) {
                     if(mListener != null)
-                        mListener.onMoviePosterSelected(v, mMovieId);
+                        mListener.onMoviePosterSelected(v, mItemPosition);
                 }
             });
         }
@@ -81,8 +81,8 @@ public class MovieListPosterAdapter extends RecyclerView.Adapter<MovieListPoster
             return mPoster;
         }
 
-        public void setMovieId(int mMovieId) {
-            this.mMovieId = mMovieId;
+        public void setItemPosition(int itemPosition) {
+            this.mItemPosition = itemPosition;
         }
     }
 

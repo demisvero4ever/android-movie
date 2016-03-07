@@ -17,9 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListFragment extends Fragment implements MovieListContract.PopularMovieListView,
-        OnMoviePosterClick{
+        OnMoviePosterClick {
 
     private static final String TAG = "MovieListFragment";
+    private static final String MOVIE_LIST_STATE_KEY = "::state_movie_list";
 
     private MovieSelectionListener mSelectionListener;
     private MovieListContract.PopularMovieListPresenter mPresenter;
@@ -27,17 +28,24 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     private RecyclerView mList;
     private MovieListPosterAdapter mMovieListAdapter;
 
+    private List<MovieModel> mMovieList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mPresenter = new MovieList(getActivity().getApplicationContext(), this, getLoaderManager());
+
+        if (savedInstanceState != null)
+            this.mMovieList = savedInstanceState.getParcelableArrayList(MOVIE_LIST_STATE_KEY);
+        else
+            this.mMovieList = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root =  inflater.inflate(R.layout.fragment_movie_list, container, false);
+        View root = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         this.mList = (RecyclerView) root.findViewById(R.id.rv_movie_posters);
         this.mList.setHasFixedSize(true);
@@ -45,7 +53,7 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
         this.mList.setLayoutManager(new GridLayoutManager(getContext(),
                 getResources().getInteger(R.integer.movie_list_columns)));
 
-        this.mMovieListAdapter = new MovieListPosterAdapter(getContext(), new ArrayList<MovieModel>(), this);
+        this.mMovieListAdapter = new MovieListPosterAdapter(getContext(), mMovieList, this);
         this.mList.setAdapter(this.mMovieListAdapter);
 
         return root;
@@ -55,17 +63,25 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     public void onStart() {
         super.onStart();
         mSelectionListener = (MovieSelectionListener) getActivity();
-        mPresenter.registerListeners();
+        mPresenter.register();
 
-        if(mList.getAdapter().getItemCount() == 0)
+        if (mMovieList.size() == 0)
             mPresenter.loadMovieList();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mMovieList != null)
+            outState.putParcelableArrayList(MOVIE_LIST_STATE_KEY, (ArrayList<MovieModel>) mMovieList);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mSelectionListener = null;
-        mPresenter.unregisterListener();
+        mPresenter.unregister();
     }
 
     @Override
@@ -77,11 +93,16 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
 
     @Override
     public void showMovieList(List<MovieModel> list) {
-        if(list != null && list.size() > 0) {
-            this.mMovieListAdapter.setmMovieList(list);
-            this.mMovieListAdapter.notifyDataSetChanged();
-            Log.d(TAG, "showMovieList: List Updated");
-        }
+        mMovieList = list;
+
+        if(mMovieList.size() == 0)
+            mSelectionListener.clearSelection();
+        else
+            mSelectionListener.refreshDetails(list.get(0));
+
+        this.mMovieListAdapter.setmMovieList(mMovieList);
+        this.mMovieListAdapter.notifyDataSetChanged();
+        Log.d(TAG, "showMovieList: List Updated");
     }
 
     @Override
@@ -90,8 +111,15 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     }
 
     @Override
-    public void onMoviePosterSelected(View view, int movieId) {
-        if(mSelectionListener != null)
-            mSelectionListener.onSelectMovie(view, movieId);
+    public void onMoviePosterSelected(View holder, int position) {
+        if (mSelectionListener != null && mMovieList.size() > position) {
+            mSelectionListener.onSelectMovie(holder, mMovieList.get(position));
+        }
     }
+
+    public void doRefresh() {
+        Log.d(TAG, "doRefresh");
+        mPresenter.loadMovieList();
+    }
+
 }

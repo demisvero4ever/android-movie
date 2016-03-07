@@ -1,8 +1,5 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
-import android.content.Context;
-import android.support.v4.app.LoaderManager;
-
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 
 import java.util.List;
@@ -18,8 +15,8 @@ public interface MovieListContract {
     }
 
     interface PopularMovieListPresenter{
-        void registerListeners();
-        void unregisterListener();
+        void register();
+        void unregister();
 
         void loadMovieList();
         void dismissMovieList();

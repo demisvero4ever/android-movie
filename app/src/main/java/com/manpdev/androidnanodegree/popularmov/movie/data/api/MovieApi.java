@@ -9,7 +9,7 @@ import retrofit.http.Query;
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
  */
-public interface MoviesApi {
+public interface MovieApi {
 
     @GET("3/discover/movie")
     Call<MovieWrapperModel> getSortedMovieList(@Query("api_key") String apiKey, @Query("sort_by") String sortBy);

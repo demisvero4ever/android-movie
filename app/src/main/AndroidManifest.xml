@@ -23,10 +23,6 @@
                 android:value=".movie.movielist.MovieListActivity" />
         </activity>
 
-        <service
-            android:name=".services.SyncDataService"
-            android:exported="false"/>
-
         <provider
             android:authorities="com.manpdev.androidnanodegree.popularmov.movie"
             android:name=".movie.data.provider.MoviesProvider"

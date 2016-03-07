@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Visibility;
 import android.util.Log;
@@ -192,5 +193,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initializeWindowsTransition() {
         getWindow().setExitTransition(new Fade(Visibility.MODE_OUT));
+        getWindow().setReenterTransition(new Explode());
     }
 }

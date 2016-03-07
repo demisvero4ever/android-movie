@@ -41,18 +41,19 @@
             android:id="@+id/iv_movie_poster"
             android:layout_width="@dimen/movie_thumb_with"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_default"
             android:layout_marginTop="@dimen/dimen_double"
             android:adjustViewBounds="true"
             android:contentDescription="@string/movie_poster_description"
             android:scaleType="fitCenter"
-            tools:src="@drawable/ic_no_poster_available" />
+            tools:src="@drawable/ic_no_poster_available"
+            android:layout_marginLeft="@dimen/dimen_default" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_double"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/dimen_double">
 
             <TextView
                 android:id="@+id/tv_movie_release_date"
@@ -73,6 +74,15 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_gravity="right" />
 
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggleButton"
+                android:layout_gravity="right"
+                android:textOn="Favorite"
+                android:textOff="Favorite" />
+
         </LinearLayout>
 
         <TextView
@@ -80,9 +90,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnSpan="2"
-            android:layout_margin="@dimen/dimen_default"
             tools:text="This is the synopsis of this movie. This is the synopsis of this movie This is the synopsis of this movie This is the synopsis of this movie"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:layout_margin="@dimen/dimen_default" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/movie_trailers_label"
+            android:id="@+id/tv_movie_trailers_label"
+            android:layout_margin="@dimen/dimen_default" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rv_movie_trailers"
+            android:layout_columnSpan="2"
+            android:layout_margin="@dimen/dimen_default" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/movie_reviews_label"
+            android:id="@+id/tv_movie_reviews_label"
+            android:layout_margin="@dimen/dimen_default" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rv_movie_reviews"
+            android:layout_columnSpan="2"
+            android:layout_margin="@dimen/dimen_default" />
     </GridLayout>
 </ScrollView>

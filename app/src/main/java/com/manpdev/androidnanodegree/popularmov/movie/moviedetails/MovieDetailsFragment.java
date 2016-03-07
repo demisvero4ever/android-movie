@@ -71,14 +71,10 @@ public class MovieDetailsFragment extends Fragment {
             initTransitionElements();
         }
 
-        return root;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         if (mMovie != null && !mTwoPanels)
             showMovieDetails();
+
+        return root;
     }
 
     @Override

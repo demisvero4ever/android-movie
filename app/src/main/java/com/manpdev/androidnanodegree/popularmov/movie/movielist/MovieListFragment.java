@@ -111,9 +111,9 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     }
 
     @Override
-    public void onMoviePosterSelected(View holder, int position) {
-        if (mSelectionListener != null && mMovieList.size() > position) {
-            mSelectionListener.onSelectMovie(holder, mMovieList.get(position));
+    public void onMoviePosterSelected(MovieListPosterAdapter.PosterViewHolder holder) {
+        if (mSelectionListener != null && mMovieList.size() > holder.getAdapterPosition()) {
+            mSelectionListener.onSelectMovie(holder.getPosterView(), mMovieList.get(holder.getAdapterPosition()));
         }
     }
 

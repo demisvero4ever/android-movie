@@ -139,7 +139,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     @Override
     public void onSelectMovie(View holder, MovieModel movie) {
         mSelectedMovie = movie;
-
         if (mTwoPanels) {
             updateMovieDetailFragment();
         } else {

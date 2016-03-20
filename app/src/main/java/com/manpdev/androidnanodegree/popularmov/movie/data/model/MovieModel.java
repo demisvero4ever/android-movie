@@ -14,9 +14,9 @@ import java.util.Locale;
 /**
  * Created by novoa.pro@gmail.com on 2/14/16
  */
-public class MovieModel implements Parcelable{
+public class MovieModel implements Parcelable {
 
-    private static final String sPosterBasePath= "http://image.tmdb.org/t/p/w185";
+    private static final String sPosterBasePath = "http://image.tmdb.org/t/p/w185";
     public static String RElEASE_DATE_FORMAT = "yyyy-MM-dd";
 
     private int id;
@@ -27,7 +27,8 @@ public class MovieModel implements Parcelable{
     private double vote_average;
     private double popularity;
 
-    public MovieModel() {}
+    public MovieModel() {
+    }
 
 
     protected MovieModel(Parcel in) {
@@ -65,10 +66,14 @@ public class MovieModel implements Parcelable{
     }
 
     public String getPosterPath() {
-        if(!TextUtils.isEmpty(poster_path))
+        if (!TextUtils.isEmpty(poster_path))
             return sPosterBasePath + poster_path;
         else
             return poster_path;
+    }
+
+    public String getPoster() {
+        return poster_path;
     }
 
     public String getReleaseDate() {
@@ -112,7 +117,7 @@ public class MovieModel implements Parcelable{
     }
 
     public String getReleaseYear() {
-        if(TextUtils.isEmpty(release_date))
+        if (TextUtils.isEmpty(release_date))
             return "";
 
         DateFormat df = new SimpleDateFormat(MovieModel.RElEASE_DATE_FORMAT, Locale.US);

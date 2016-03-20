@@ -3,6 +3,7 @@ package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

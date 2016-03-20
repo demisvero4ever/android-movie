@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0-alpha1'
+        classpath 'com.android.tools.build:gradle:2.1.0-alpha3'
     }
 }
 
@@ -20,5 +20,5 @@ task clean(type: Delete) {
 }
 
 ext{
-    movieApiKey =  '"put_api_key_here"'
+    movieApiKey =  '""'
 }

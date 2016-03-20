@@ -1,7 +1,9 @@
-package com.manpdev.androidnanodegree.popularmov.movie.data.model;
+package com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 
 import java.util.List;
 

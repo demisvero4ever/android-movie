@@ -10,11 +10,12 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.R;
+import com.manpdev.androidnanodegree.popularmov.common.taskproc.Callback;
+import com.manpdev.androidnanodegree.popularmov.common.taskproc.TaskProcessor;
 import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
-import com.manpdev.androidnanodegree.popularmov.movie.data.operation.base.Observer;
-import com.manpdev.androidnanodegree.popularmov.movie.data.operation.GetMovieListOperation;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieWrapperModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.operation.net.GetMovieListOperation;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MoviesProvider;
 
@@ -39,16 +40,19 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
     private MovieListContract.PopularMovieListView mView;
 
-    private GetMovieListOperation mMovieListOperation;
-    private Observer<MovieWrapperModel> mMovieListObserver = new Observer<MovieWrapperModel>() {
+    private static final String GET_MOVIE_LIST_OP_ID = "movie_list_operation";
+    private TaskProcessor mTaskProcessor;
+    private final GetMovieListOperation mGetMovieListOperation;
+
+    private Callback<MovieWrapperModel> mMovieListObserver = new Callback<MovieWrapperModel>() {
         @Override
-        public void onResult(MovieWrapperModel data) {
-            Log.d(TAG, "onResult: " + data.getResults().size());
-            mView.showMovieList(data.getResults());
+        public void onResult(MovieWrapperModel result) {
+            Log.d(TAG, "onResult: " + result.getResults().size());
+            mView.showMovieList(result.getResults());
         }
 
         @Override
-        public void onError(Throwable th) {
+        public void onFailure(Throwable th) {
             Log.e(TAG, "onError: ", th);
             mView.showMessage(R.string.sync_data_failed);
         }
@@ -58,18 +62,13 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
         this.mContext = context;
         this.mView = view;
         this.mLoadManager = loaderManager;
-        this.mMovieListOperation = new GetMovieListOperation(context);
+        this.mTaskProcessor = new TaskProcessor();
+        this.mGetMovieListOperation  = new GetMovieListOperation(mContext);
     }
 
     @Override
     public void loadMovieList() {
-        if (Preferences.getSelectionOption(mContext).equals(Preferences.FAVORITES))
-            mLoadManager.initLoader(MOVIE_LOADER_ID, null, this);
-        else {
-            this.mMovieListOperation
-                    .setSelectionOption(Preferences.getSelectionOption(mContext))
-                    .execute();
-        }
+        refreshMovieList();
     }
 
     @Override
@@ -80,13 +79,12 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
     @Override
     public void register() {
         Preferences.registerPreferencesListener(mContext, this);
-        this.mMovieListOperation.subscribe(this.mMovieListObserver);
     }
 
     @Override
     public void unregister() {
         Preferences.unregisterPreferencesListener(mContext, this);
-        this.mMovieListOperation.unsubscribe();
+        this.mTaskProcessor.unSubscribeOperation(GET_MOVIE_LIST_OP_ID);
     }
 
     @Override
@@ -113,7 +111,7 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(Preferences.MOVIE_SELECTION_OPTION))
+        if (key.equals(Preferences.MOVIE_SELECTION_OPTION))
             refreshMovieList();
     }
 
@@ -121,12 +119,13 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
         if (Preferences.getSelectionOption(mContext).equals(Preferences.FAVORITES))
             mLoadManager.restartLoader(MOVIE_LOADER_ID, null, this);
         else {
-            this.mMovieListOperation
-                    .setSelectionOption(Preferences.getSelectionOption(mContext))
-                    .execute();
+            this.mGetMovieListOperation.setSelectionOption(Preferences.getSelectionOption(mContext));
+
+            this.mTaskProcessor.perform(GET_MOVIE_LIST_OP_ID,
+                    mGetMovieListOperation,
+                    mMovieListObserver);
         }
     }
-
 
     private List<MovieModel> buildMovieModelList(Cursor data) {
         List<MovieModel> result = new ArrayList<>();

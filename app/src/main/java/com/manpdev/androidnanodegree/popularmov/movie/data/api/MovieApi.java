@@ -1,9 +1,12 @@
 package com.manpdev.androidnanodegree.popularmov.movie.data.api;
 
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieWrapperModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieReviewWrapperModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieTrailerWrapperModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieWrapperModel;
 
 import retrofit.Call;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -11,6 +14,15 @@ import retrofit.http.Query;
  */
 public interface MovieApi {
 
-    @GET("3/discover/movie")
-    Call<MovieWrapperModel> getSortedMovieList(@Query("api_key") String apiKey, @Query("sort_by") String sortBy);
+    @GET("3/movie/popular")
+    Call<MovieWrapperModel> getPopularMovies(@Query("api_key") String apiKey);
+
+    @GET("3/movie/top_rated")
+    Call<MovieWrapperModel> getTopRatedMovies(@Query("api_key") String apiKey);
+
+    @GET("3/movie/{movieId}/reviews")
+    Call<MovieReviewWrapperModel> getMovieReviews(@Query("api_key") String apiKey, @Path("movieId") int movieId);
+
+    @GET("3/movie/{movieId}/videos")
+    Call<MovieTrailerWrapperModel> getMovieTrailers(@Query("api_key") String apiKey, @Path("movieId") int movieId);
 }

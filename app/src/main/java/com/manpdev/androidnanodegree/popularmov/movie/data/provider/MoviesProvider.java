@@ -56,7 +56,7 @@ public class MoviesProvider extends ContentProvider{
 
             case URI_MATCH_MOVIE_ID:
                 result = database.query(MovieContract.MovieEntry.TABLE_NAME, columns,
-                        MovieContract.MovieEntry._ID + "=? ", new String[]{uri.getLastPathSegment()}, null, null, null);
+                        MovieContract.MovieEntry.COLUMN_CLOUD_ID + "=? ", new String[]{uri.getLastPathSegment()}, null, null, null);
                 break;
             default:
                 String message = "Unknown URI: " + uri.toString();
@@ -111,7 +111,7 @@ public class MoviesProvider extends ContentProvider{
 
             case URI_MATCH_MOVIE_ID:
                 result = database.delete(MovieContract.MovieEntry.TABLE_NAME,
-                        MovieContract.MovieEntry._ID + "=? ", new String[]{uri.getLastPathSegment()});
+                        MovieContract.MovieEntry.COLUMN_CLOUD_ID + "=? ", new String[]{uri.getLastPathSegment()});
                 break;
             default:
                 String message = "Unknown URI: " + uri.toString();
@@ -138,7 +138,7 @@ public class MoviesProvider extends ContentProvider{
 
             case URI_MATCH_MOVIE_ID:
                 result = database.update(MovieContract.MovieEntry.TABLE_NAME, values,
-                        MovieContract.MovieEntry._ID + "=? ", new String[]{uri.getLastPathSegment()});
+                        MovieContract.MovieEntry.COLUMN_CLOUD_ID + "=? ", new String[]{uri.getLastPathSegment()});
                 break;
             default:
                 String message = "Unknown URI: " + uri.toString();

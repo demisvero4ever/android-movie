@@ -50,8 +50,11 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
         this.mList = (RecyclerView) root.findViewById(R.id.rv_movie_posters);
         this.mList.setHasFixedSize(true);
 
-        this.mList.setLayoutManager(new GridLayoutManager(getContext(),
-                getResources().getInteger(R.integer.movie_list_columns)));
+        GridLayoutManager gridLayout = new GridLayoutManager(getContext(),
+                getResources().getInteger(R.integer.movie_list_columns));
+
+        gridLayout.setAutoMeasureEnabled(true);
+        this.mList.setLayoutManager(gridLayout);
 
         this.mMovieListAdapter = new MovieListPosterAdapter(getContext(), mMovieList, this);
         this.mList.setAdapter(this.mMovieListAdapter);

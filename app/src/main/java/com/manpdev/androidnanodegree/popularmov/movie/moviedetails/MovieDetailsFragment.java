@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
@@ -20,9 +21,10 @@ import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieListActivit
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieSelectionListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
 import java.util.Locale;
 
-public class MovieDetailsFragment extends Fragment {
+public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.MovieDetailsView{
 
     private static final String TAG = "MovieDetailsFragment";
     private static final String MOVIE_STATE = "::movie_state";
@@ -36,6 +38,9 @@ public class MovieDetailsFragment extends Fragment {
     private TextView mSynopsisTextView;
     private TextView mVoteAvgTextView;
     private TextView mDateTextView;
+    private ToggleButton mFavoriteToggle;
+
+    private MovieDetailsContract.MovieDetailsPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,8 @@ public class MovieDetailsFragment extends Fragment {
         }else if(savedInstanceState != null){
             this.mMovie = savedInstanceState.getParcelable(MOVIE_STATE);
         }
+
+        mPresenter = new MovieDetails(getContext(), this);
     }
 
     @Override
@@ -65,6 +72,17 @@ public class MovieDetailsFragment extends Fragment {
         this.mSynopsisTextView = (TextView) root.findViewById(R.id.tv_movie_synopsis);
         this.mVoteAvgTextView = (TextView) root.findViewById(R.id.tv_movie_vote_avg);
         this.mDateTextView = (TextView) root.findViewById(R.id.tv_movie_release_date);
+        this.mFavoriteToggle = (ToggleButton) root.findViewById(R.id.bt_favorite);
+
+        this.mFavoriteToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mFavoriteToggle.isChecked())
+                    mPresenter.saveMovieAsFavorite(mMovie);
+                else
+                    mPresenter.removeMovieFromFavorites(mMovie.getId());
+            }
+        });
 
         if (!mTwoPanels && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.mTitleContainer.setY(-1 * getResources().getDimension(R.dimen.main_title_frame_height));
@@ -72,9 +90,19 @@ public class MovieDetailsFragment extends Fragment {
         }
 
         if (mMovie != null && !mTwoPanels)
-            showMovieDetails();
+            updateMovie(mMovie);
 
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -86,7 +114,24 @@ public class MovieDetailsFragment extends Fragment {
 
     public void updateMovie(MovieModel movie){
         this.mMovie = movie;
+        mPresenter.loadMovieDetails(mMovie.getId());
         showMovieDetails();
+    }
+
+    @Override
+    public void showMovieTrailers(List<Object> movie) {
+
+    }
+
+    @Override
+    public void showMovieReviews(List<Object> movie) {
+
+    }
+
+    @Override
+    public void favoriteSelection(boolean isFavorite) {
+        this.mFavoriteToggle.setVisibility(View.VISIBLE);
+        this.mFavoriteToggle.setChecked(isFavorite);
     }
 
     private void showMovieDetails() {

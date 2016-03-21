@@ -10,8 +10,8 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.R;
-import com.manpdev.androidnanodegree.popularmov.common.taskproc.Callback;
-import com.manpdev.androidnanodegree.popularmov.common.taskproc.TaskProcessor;
+import com.manpdev.androidnanodegree.popularmov.common.tasks.Callback;
+import com.manpdev.androidnanodegree.popularmov.common.tasks.TaskProcessor;
 import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieWrapperModel;

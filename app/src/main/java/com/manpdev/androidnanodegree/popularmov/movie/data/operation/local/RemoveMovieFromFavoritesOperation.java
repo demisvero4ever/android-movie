@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.util.Log;
 
-import com.manpdev.androidnanodegree.popularmov.common.taskproc.Task;
+import com.manpdev.androidnanodegree.popularmov.common.tasks.Task;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MovieContract;
 import com.manpdev.androidnanodegree.popularmov.movie.data.provider.MoviesProvider;
 

@@ -1,4 +1,4 @@
-package com.manpdev.androidnanodegree.popularmov.common.taskproc;
+package com.manpdev.androidnanodegree.popularmov.common.tasks;
 
 /**
  * novoa on 3/20/16.

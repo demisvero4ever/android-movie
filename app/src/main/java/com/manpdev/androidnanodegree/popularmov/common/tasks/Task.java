@@ -1,9 +1,6 @@
-package com.manpdev.androidnanodegree.popularmov.common.taskproc;
+package com.manpdev.androidnanodegree.popularmov.common.tasks;
 
 import android.support.annotation.WorkerThread;
-import android.text.TextUtils;
-
-import java.util.UUID;
 
 import rx.Observable;
 import rx.Subscriber;

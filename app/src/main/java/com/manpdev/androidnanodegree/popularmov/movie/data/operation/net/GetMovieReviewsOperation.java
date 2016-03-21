@@ -3,7 +3,7 @@ package com.manpdev.androidnanodegree.popularmov.movie.data.operation.net;
 import android.content.Context;
 import android.util.Log;
 
-import com.manpdev.androidnanodegree.popularmov.common.taskproc.Task;
+import com.manpdev.androidnanodegree.popularmov.common.tasks.Task;
 import com.manpdev.androidnanodegree.popularmov.movie.data.api.MovieApiRequester;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieReviewWrapperModel;
 

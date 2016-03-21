@@ -1,6 +1,5 @@
-package com.manpdev.androidnanodegree.popularmov.common.taskproc;
+package com.manpdev.androidnanodegree.popularmov.common.tasks;
 
-import rx.Observable;
 import rx.Subscriber;
 
 /**

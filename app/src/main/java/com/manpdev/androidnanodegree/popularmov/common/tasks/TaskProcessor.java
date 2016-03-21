@@ -1,4 +1,4 @@
-package com.manpdev.androidnanodegree.popularmov.common.taskproc;
+package com.manpdev.androidnanodegree.popularmov.common.tasks;
 
 import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;

@@ -37,7 +37,7 @@ public class GetMovieTrailersOperation extends Task<MovieTrailerWrapperModel> {
             Log.d(TAG, "execute() called");
 
             Call<MovieTrailerWrapperModel> request = mRequester.getMovieApi()
-                    .getMovieTrailers(mRequester.getMovieApiKey(), mMovieId);
+                    .getMovieTrailers(mMovieId, mRequester.getMovieApiKey());
 
             Response<MovieTrailerWrapperModel> response = request.execute();
 

@@ -11,6 +11,7 @@ import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieTr
 import com.manpdev.androidnanodegree.popularmov.movie.data.operation.local.FavoriteMovieCheckOperation;
 import com.manpdev.androidnanodegree.popularmov.movie.data.operation.local.MarkMovieAsFavoriteOperation;
 import com.manpdev.androidnanodegree.popularmov.movie.data.operation.local.RemoveMovieFromFavoritesOperation;
+import com.manpdev.androidnanodegree.popularmov.movie.data.operation.net.GetMovieReviewsOperation;
 
 /**
  * android-nd-popular-mov android-nd-popular-mov novoa on 3/19/16.
@@ -40,6 +41,7 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
     @Override
     public void loadMovieDetails(int cloudMovieId) {
         mTaskProcessor.perform(CHECK_FAV_TASK_ID, new FavoriteMovieCheckOperation(mContext, cloudMovieId), mFavCheckCallback);
+        mTaskProcessor.perform(GET_REVIEW_TASK_ID, new GetMovieReviewsOperation(mContext, cloudMovieId), mGetReviewListCallback);
     }
 
     @Override
@@ -68,7 +70,8 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
     private Callback<MovieTrailerWrapperModel> mGetTrailerListCallback = new Callback<MovieTrailerWrapperModel>() {
         @Override
         public void onResult(MovieTrailerWrapperModel result) {
-
+            if(result != null && result.getResults() != null)
+                mView.showMovieTrailers(result.getResults());
         }
 
         @Override
@@ -80,7 +83,8 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
     private Callback<MovieReviewWrapperModel> mGetReviewListCallback = new Callback<MovieReviewWrapperModel>() {
         @Override
         public void onResult(MovieReviewWrapperModel result) {
-
+            if(result != null && result.getResults() != null)
+                mView.showMovieReviews(result.getResults());
         }
 
         @Override

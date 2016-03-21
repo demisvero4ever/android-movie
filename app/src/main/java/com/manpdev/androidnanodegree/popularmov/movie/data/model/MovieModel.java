@@ -3,7 +3,6 @@ package com.manpdev.androidnanodegree.popularmov.movie.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;

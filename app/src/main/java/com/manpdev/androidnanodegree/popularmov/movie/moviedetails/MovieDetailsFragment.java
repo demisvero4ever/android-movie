@@ -1,22 +1,21 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieReviewModel;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieTrailerModel;
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieListActivity;
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieSelectionListener;
 import com.squareup.picasso.Picasso;
@@ -84,11 +83,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
             }
         });
 
-        if (!mTwoPanels && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.mTitleContainer.setY(-1 * getResources().getDimension(R.dimen.main_title_frame_height));
-            initTransitionElements();
-        }
-
         if (mMovie != null && !mTwoPanels)
             updateMovie(mMovie);
 
@@ -119,12 +113,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
     @Override
-    public void showMovieTrailers(List<Object> movie) {
+    public void showMovieTrailers(List<MovieTrailerModel> trailers) {
 
     }
 
     @Override
-    public void showMovieReviews(List<Object> movie) {
+    public void showMovieReviews(List<MovieReviewModel> trailers) {
 
     }
 
@@ -138,14 +132,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         Log.d(TAG, "showMovieDetails() called with: " + "movie = [" + mMovie.getTitle() + "]");
 
         this.mTitleContainer.setVisibility(View.VISIBLE);
-
-        if (!mTwoPanels) {
-            this.mTitleContainer.animate()
-                    .setInterpolator(new AccelerateInterpolator())
-                    .translationY(0)
-                    .setStartDelay(20)
-                    .setListener(null);
-        }
 
         if (!TextUtils.isEmpty(mMovie.getPosterPath()))
             Picasso.with(getContext())
@@ -161,10 +147,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         mSynopsisTextView.setText(mMovie.getOverview());
         mVoteAvgTextView.setText(String.format(Locale.US, "%.2f/10", mMovie.getVoteAverage()));
         mDateTextView.setText(mMovie.getReleaseYear());
-    }
-
-    private void initTransitionElements() {
-        ViewCompat.setTransitionName(this.mPosterImageView, getString(R.string.movie_poster_resource));
     }
 }
 

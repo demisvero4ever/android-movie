@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieReviewModel;
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieTrailerModel;
 
 import java.util.List;
 

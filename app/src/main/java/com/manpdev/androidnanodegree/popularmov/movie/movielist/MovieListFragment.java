@@ -110,13 +110,14 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
 
     @Override
     public void showMessage(int resourceId) {
-        Snackbar.make(mList, getString(resourceId), Snackbar.LENGTH_LONG).show();
+        if(!this.isDetached())
+            Snackbar.make(mList, getString(resourceId), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onMoviePosterSelected(MovieListPosterAdapter.PosterViewHolder holder) {
         if (mSelectionListener != null && mMovieList.size() > holder.getAdapterPosition()) {
-            mSelectionListener.onSelectMovie(holder.getPosterView(), mMovieList.get(holder.getAdapterPosition()));
+            mSelectionListener.onSelectMovie(mMovieList.get(holder.getAdapterPosition()));
         }
     }
 

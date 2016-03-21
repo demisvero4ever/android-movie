@@ -37,7 +37,7 @@ public class GetMovieReviewsOperation extends Task<MovieReviewWrapperModel> {
             Log.d(TAG, "execute() called");
 
             Call<MovieReviewWrapperModel> request = mRequester.getMovieApi()
-                    .getMovieReviews(mRequester.getMovieApiKey(), mMovieId);
+                    .getMovieReviews(mMovieId, mRequester.getMovieApiKey());
 
             Response<MovieReviewWrapperModel> response = request.execute();
 

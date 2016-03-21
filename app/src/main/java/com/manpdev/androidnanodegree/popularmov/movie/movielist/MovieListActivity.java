@@ -1,17 +1,10 @@
 package com.manpdev.androidnanodegree.popularmov.movie.movielist;
 
-import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,7 +47,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_movie_details_container, mDetailsFragment, MOVIE_DETAIL_TAG)
                     .commit();
-        }else{
+        } else {
             Fragment detailsFragment = getSupportFragmentManager().findFragmentByTag(MOVIE_DETAIL_TAG);
 
             if (detailsFragment != null)
@@ -62,9 +55,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
                         .remove(detailsFragment)
                         .commit();
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            initializeWindowsTransition();
     }
 
     @Override
@@ -138,12 +128,12 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     }
 
     @Override
-    public void onSelectMovie(View holder, MovieModel movie) {
+    public void onSelectMovie(MovieModel movie) {
         mSelectedMovie = movie;
         if (mTwoPanels) {
             updateMovieDetailFragment();
         } else {
-            startMovieDetailActivity(holder);
+            startMovieDetailActivity();
         }
     }
 
@@ -159,7 +149,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     public void clearSelection() {
         mSelectedMovie = null;
 
-        if(mTwoPanels)
+        if (mTwoPanels)
             mDetailFragmentContainer.setVisibility(View.INVISIBLE);
     }
 
@@ -174,25 +164,13 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
         }
     }
 
-    private void startMovieDetailActivity(View holder) {
+    private void startMovieDetailActivity() {
         Bundle arg = new Bundle();
         arg.putParcelable(MovieSelectionListener.EXTRA_MOVIE, mSelectedMovie);
 
         Intent intent = new Intent(MovieListActivity.this, MovieDetailsActivity.class);
         intent.putExtras(arg);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation(this, holder, getString(R.string.movie_poster_resource));
-
-            startActivity(intent, options.toBundle());
-        } else
-            startActivity(intent);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void initializeWindowsTransition() {
-        getWindow().setExitTransition(new Fade(Visibility.MODE_OUT));
-        getWindow().setReenterTransition(new Explode());
+        startActivity(intent);
     }
 }

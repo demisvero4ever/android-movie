@@ -21,8 +21,8 @@ public interface MovieApi {
     Call<MovieWrapperModel> getTopRatedMovies(@Query("api_key") String apiKey);
 
     @GET("3/movie/{movieId}/reviews")
-    Call<MovieReviewWrapperModel> getMovieReviews(@Query("api_key") String apiKey, @Path("movieId") int movieId);
+    Call<MovieReviewWrapperModel> getMovieReviews(@Path("movieId") int movieId, @Query("api_key") String apiKey);
 
     @GET("3/movie/{movieId}/videos")
-    Call<MovieTrailerWrapperModel> getMovieTrailers(@Query("api_key") String apiKey, @Path("movieId") int movieId);
+    Call<MovieTrailerWrapperModel> getMovieTrailers(@Path("movieId") int movieId, @Query("api_key") String apiKey);
 }

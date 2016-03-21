@@ -24,6 +24,18 @@ public class MovieReviewModel implements Parcelable{
         dest.writeString(url);
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     public int describeContents() {
         return 0;

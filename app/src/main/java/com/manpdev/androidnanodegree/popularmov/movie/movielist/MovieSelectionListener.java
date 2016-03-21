@@ -9,7 +9,7 @@ import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
  */
 public interface MovieSelectionListener {
     String EXTRA_MOVIE = "::extra_movie";
-    void onSelectMovie(View holder, MovieModel movie);
+    void onSelectMovie(MovieModel movie);
     void refreshDetails(MovieModel movie);
     void clearSelection();
  }

@@ -25,10 +25,10 @@ public class MovieModel implements Parcelable {
     private String release_date;
     private double vote_average;
     private double popularity;
+    private boolean favorite;
 
     public MovieModel() {
     }
-
 
     protected MovieModel(Parcel in) {
         id = in.readInt();
@@ -38,6 +38,7 @@ public class MovieModel implements Parcelable {
         release_date = in.readString();
         vote_average = in.readDouble();
         popularity = in.readDouble();
+        favorite = in.readByte() != 0;
     }
 
     @Override
@@ -49,8 +50,33 @@ public class MovieModel implements Parcelable {
         dest.writeString(release_date);
         dest.writeDouble(vote_average);
         dest.writeDouble(popularity);
+        dest.writeByte((byte) (favorite ? 1 : 0));
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {
+        @Override
+        public MovieModel createFromParcel(Parcel in) {
+            return new MovieModel(in);
+        }
+
+        @Override
+        public MovieModel[] newArray(int size) {
+            return new MovieModel[size];
+        }
+    };
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 
     public int getId() {
         return id;
@@ -131,20 +157,4 @@ public class MovieModel implements Parcelable {
         }
     }
 
-    public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {
-        @Override
-        public MovieModel createFromParcel(Parcel in) {
-            return new MovieModel(in);
-        }
-
-        @Override
-        public MovieModel[] newArray(int size) {
-            return new MovieModel[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 }

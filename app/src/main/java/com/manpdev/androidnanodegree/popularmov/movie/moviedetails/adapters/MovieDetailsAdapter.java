@@ -1,6 +1,5 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters;
 
-import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,9 +30,11 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private MovieModel mMovie;
     private MovieExtrasModel mMovieExtrasModel;
+    private MovieDetailsListener mListener;
 
-    public MovieDetailsAdapter(Context context, MovieModel movie) {
+    public MovieDetailsAdapter(MovieModel movie, MovieDetailsListener listener) {
         this.mMovie = movie;
+        this.mListener = listener;
     }
 
     public void setMovieExtras(MovieExtrasModel mMovieExtrasModel) {
@@ -41,6 +42,10 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return;
 
         this.mMovieExtrasModel = mMovieExtrasModel;
+    }
+
+    public void updateMovie(MovieModel mMovie) {
+        this.mMovie = mMovie;
     }
 
     @Override
@@ -68,18 +73,18 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_TRAILER:
                 root = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_movie_trailer, parent, false);
-                return new MovieDetailsTrailerVH(root);
+                return new MovieDetailsTrailerVH(root, mListener);
 
             case TYPE_REVIEW:
                 root = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_movie_review, parent, false);
-                return new MovieDetailsReviewVH(root);
+                return new MovieDetailsReviewVH(root, mListener);
 
             case TYPE_DESCRIPTION:
                 default:
                 root = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_movie_details, parent, false);
-                return new MovieDetailsVH(root);
+                return new MovieDetailsVH(root, mListener);
         }
     }
 
@@ -93,7 +98,8 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((MovieDetailsTrailerVH)holder).bindContent(mMovieExtrasModel.getTrailers().get((position - 1)));
                 break;
             case TYPE_REVIEW:
-                ((MovieDetailsReviewVH)holder).bindContent(mMovieExtrasModel.getReviews().get((position - 1 - mMovieExtrasModel.getTrailers().size())));
+                ((MovieDetailsReviewVH)holder).bindContent(
+                        mMovieExtrasModel.getReviews().get((position - 1 - mMovieExtrasModel.getTrailers().size())));
                 break;
         }
     }

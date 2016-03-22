@@ -1,6 +1,4 @@
-package com.manpdev.androidnanodegree.popularmov.movie.movielist;
-
-import android.view.View;
+package com.manpdev.androidnanodegree.popularmov.movie.movielist.adapters;
 
 /**
  * Created by novoa.pro@gmail.com on 2/21/16

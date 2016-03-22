@@ -1,4 +1,4 @@
-package com.manpdev.androidnanodegree.popularmov.movie.movielist;
+package com.manpdev.androidnanodegree.popularmov.movie.movielist.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

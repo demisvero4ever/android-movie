@@ -11,7 +11,7 @@ import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieTr
 import com.manpdev.androidnanodegree.popularmov.movie.data.operation.local.FavoriteMovieCheckOperation;
 import com.manpdev.androidnanodegree.popularmov.movie.data.operation.local.MarkMovieAsFavoriteOperation;
 import com.manpdev.androidnanodegree.popularmov.movie.data.operation.local.RemoveMovieFromFavoritesOperation;
-import com.manpdev.androidnanodegree.popularmov.movie.data.operation.net.GetMovieReviewsOperation;
+import com.manpdev.androidnanodegree.popularmov.movie.data.operation.net.GetMovieExtrasOperation;
 
 /**
  * android-nd-popular-mov android-nd-popular-mov novoa on 3/19/16.
@@ -41,7 +41,7 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
     @Override
     public void loadMovieDetails(int cloudMovieId) {
         mTaskProcessor.perform(CHECK_FAV_TASK_ID, new FavoriteMovieCheckOperation(mContext, cloudMovieId), mFavCheckCallback);
-        mTaskProcessor.perform(GET_REVIEW_TASK_ID, new GetMovieReviewsOperation(mContext, cloudMovieId), mGetReviewListCallback);
+        mTaskProcessor.perform(GET_REVIEW_TASK_ID, new GetMovieExtrasOperation(mContext, cloudMovieId), mGetReviewListCallback);
     }
 
     @Override

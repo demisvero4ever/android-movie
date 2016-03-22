@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
+import com.manpdev.androidnanodegree.popularmov.movie.movielist.adapters.MovieListPosterAdapter;
+import com.manpdev.androidnanodegree.popularmov.movie.movielist.adapters.OnMoviePosterClick;
 
 import java.util.ArrayList;
 import java.util.List;

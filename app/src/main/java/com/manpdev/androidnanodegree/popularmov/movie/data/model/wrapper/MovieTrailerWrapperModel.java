@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieTrailerModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,10 @@ import java.util.List;
 public class MovieTrailerWrapperModel implements Parcelable{
 
     private List<MovieTrailerModel> results;
+
+    public MovieTrailerWrapperModel() {
+        this.results = new ArrayList<>();
+    }
 
     protected MovieTrailerWrapperModel(Parcel in) {
         results = in.createTypedArrayList(MovieTrailerModel.CREATOR);

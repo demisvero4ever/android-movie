@@ -1,9 +1,12 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters.holders;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieReviewModel;
@@ -27,7 +30,11 @@ public class MovieDetailsReviewVH extends RecyclerView.ViewHolder{
         this.mContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 3/22/16 Call listener and pass the url
+
+                // TODO: 3/22/16 change
+                Intent intent  = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(mReviewUrl));
+                mContainer.getContext().startActivity(intent);
             }
         });
     }

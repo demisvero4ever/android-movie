@@ -12,19 +12,19 @@ import java.util.List;
 /**
  * novoa on 3/22/16.
  */
-public class MovieExtras implements Parcelable{
+public class MovieExtrasModel implements Parcelable{
 
     private int mMovieId;
     private List<MovieTrailerModel> mTrailers;
     private List<MovieReviewModel> mReviews;
 
-    public MovieExtras(int movieId) {
+    public MovieExtrasModel(int movieId) {
         this.mMovieId = movieId;
         this.mTrailers = new ArrayList<>();
         this.mReviews = new ArrayList<>();
     }
 
-    protected MovieExtras(Parcel in) {
+    protected MovieExtrasModel(Parcel in) {
         mMovieId = in.readInt();
         mTrailers = in.createTypedArrayList(MovieTrailerModel.CREATOR);
         mReviews = in.createTypedArrayList(MovieReviewModel.CREATOR);
@@ -70,15 +70,15 @@ public class MovieExtras implements Parcelable{
         return 0;
     }
 
-    public static final Creator<MovieExtras> CREATOR = new Creator<MovieExtras>() {
+    public static final Creator<MovieExtrasModel> CREATOR = new Creator<MovieExtrasModel>() {
         @Override
-        public MovieExtras createFromParcel(Parcel in) {
-            return new MovieExtras(in);
+        public MovieExtrasModel createFromParcel(Parcel in) {
+            return new MovieExtrasModel(in);
         }
 
         @Override
-        public MovieExtras[] newArray(int size) {
-            return new MovieExtras[size];
+        public MovieExtrasModel[] newArray(int size) {
+            return new MovieExtrasModel[size];
         }
     };
 }

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.manpdev.androidnanodegree.popularmov.common.tasks.Task;
 import com.manpdev.androidnanodegree.popularmov.movie.data.api.MovieApiRequester;
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieExtras;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieExtrasModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieReviewWrapperModel;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieTrailerWrapperModel;
 
@@ -17,9 +17,9 @@ import retrofit.Response;
 /**
  * Created by novoa.pro@gmail.com on 3/4/16
  */
-public class GetMovieExtrasOperation extends Task<MovieExtras> {
+public class GetMovieExtrasOperation extends Task<MovieExtrasModel> {
 
-    private static final String TAG = "GetMovReviewsOperation";
+    private static final String TAG = "GetMovExtrasOperation";
 
     private int mMovieId;
     private MovieApiRequester mRequester;
@@ -30,8 +30,8 @@ public class GetMovieExtrasOperation extends Task<MovieExtras> {
     }
 
     @Override
-    public MovieExtras execute() throws Throwable {
-        MovieExtras extras = new MovieExtras(mMovieId);
+    public MovieExtrasModel execute() throws Throwable {
+        MovieExtrasModel extras = new MovieExtrasModel(mMovieId);
         extras.setTrailers(getMovieTrailers().getResults());
         extras.setReviews(getMovieReviews().getResults());
 

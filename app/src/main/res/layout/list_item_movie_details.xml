@@ -1,73 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:columnCount="2"
     tools:context=".movie.movielist.MovieListFragment">
 
-    <LinearLayout
-        android:id="@+id/fl_title_container"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/main_title_frame_height"
-        android:layout_columnSpan="2"
-        android:background="@color/colorPrimary"
-        android:visibility="gone"
-        android:paddingLeft="@dimen/main_title_frame_padding"
-        android:paddingRight="@dimen/main_title_frame_padding"
-        android:paddingBottom="@dimen/main_title_frame_padding"
-        android:paddingTop="@dimen/dimen_default">
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2">
 
-        <TextView
-            android:id="@+id/tv_movie_title"
+        <LinearLayout
+            android:id="@+id/fl_title_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_title_frame_height"
+            android:background="@color/colorPrimary"
+            android:paddingBottom="@dimen/main_title_frame_padding"
+            android:paddingLeft="@dimen/main_title_frame_padding"
+            android:paddingRight="@dimen/main_title_frame_padding"
+            android:paddingTop="@dimen/dimen_default">
+
+            <TextView
+                android:id="@+id/tv_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="fill"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textSize="@dimen/main_title_font_size"
+                android:textStyle="bold"
+                tools:text="Title of the movie." />
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fb_favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            tools:text="Title of the movie."
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white"
-            android:textSize="@dimen/main_title_font_size"
-            android:textStyle="bold"
-            android:gravity="fill" />
-
-    </LinearLayout>
+            android:src="@drawable/ic_star_white_24dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dimen_double"
+            android:layout_marginTop="@dimen/details_fav_top_margin"
+            tools:isInEditMode="true"
+            android:layout_marginBottom="6dp"
+            android:clickable="true" />
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/iv_movie_poster"
         android:layout_width="@dimen/movie_thumb_with"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_double"
+        android:layout_marginLeft="@dimen/dimen_default"
+        android:layout_marginTop="@dimen/dimen_default"
         android:adjustViewBounds="true"
         android:contentDescription="@string/movie_poster_description"
         android:scaleType="fitCenter"
-        tools:src="@drawable/ic_no_poster_available"
-        android:layout_marginLeft="@dimen/dimen_default" />
+        tools:src="@drawable/ic_no_poster_available" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_double"
         android:layout_marginTop="@dimen/dimen_double"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/dimen_double">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_movie_release_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_double"
-            tools:text="2016"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="@dimen/main_title_font_size"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="2016" />
 
         <TextView
             android:id="@+id/tv_movie_vote_avg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:layout_marginLeft="@dimen/dimen_double"
-            tools:text="8.3/10"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="right" />
+            tools:text="8.3/10" />
     </LinearLayout>
 
     <TextView
@@ -75,9 +90,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="2"
-        tools:text="This is the synopsis of this movie. This is the synopsis of this movie This is the synopsis of this movie This is the synopsis of this movie"
+        android:layout_margin="@dimen/dimen_default"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="italic"
-        android:layout_margin="@dimen/dimen_default" />
+        tools:text="This is the synopsis of this movie. This is the synopsis of this movie This is the synopsis of this movie This is the synopsis of this movie" />
 
 </GridLayout>

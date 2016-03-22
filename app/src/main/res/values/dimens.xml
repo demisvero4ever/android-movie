@@ -4,6 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="main_title_frame_height">100dp</dimen>
+    <dimen name="details_fav_top_margin">75dp</dimen>
+
+
     <dimen name="main_title_frame_padding">20dp</dimen>
     <dimen name="main_title_font_size">26sp</dimen>
 

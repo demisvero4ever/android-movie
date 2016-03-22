@@ -20,5 +20,5 @@ task clean(type: Delete) {
 }
 
 ext{
-    movieApiKey =  '""'
+    movieApiKey =  '"1e4e113e2fa60c705a6c17d78dfe5cb2"'
 }

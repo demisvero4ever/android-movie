@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
-import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieExtras;
+import com.manpdev.androidnanodegree.popularmov.movie.data.model.wrapper.MovieExtrasModel;
 import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters.holders.MovieDetailsReviewVH;
 import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters.holders.MovieDetailsTrailerVH;
 import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters.holders.MovieDetailsVH;
@@ -29,29 +29,31 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static final int TYPE_TRAILER = 1;
     public static final int TYPE_REVIEW = 2;
 
-
     private MovieModel mMovie;
-    private MovieExtras mMovieExtras;
+    private MovieExtrasModel mMovieExtrasModel;
 
     public MovieDetailsAdapter(Context context, MovieModel movie) {
         this.mMovie = movie;
     }
 
-    public void setMovieExtras(MovieExtras mMovieExtras) {
-        if(mMovie.getId() != mMovieExtras.getmMovieId())
+    public void setMovieExtras(MovieExtrasModel mMovieExtrasModel) {
+        if(mMovie.getId() != mMovieExtrasModel.getmMovieId())
             return;
 
-        this.mMovieExtras = mMovieExtras;
+        this.mMovieExtrasModel = mMovieExtrasModel;
     }
 
     @Override
     @MovieDetailItemType
     public int getItemViewType(int position) {
-        if(mMovieExtras != null){
-            if((position - 1) <= mMovieExtras.getExtrasTotal() - mMovieExtras.getTrailers().size())
+        if(position == 0)
+            return TYPE_DESCRIPTION;
+
+        if(mMovieExtrasModel != null){
+            if(position <= mMovieExtrasModel.getTrailers().size())
                 return TYPE_TRAILER;
 
-            if((position - 1) > mMovieExtras.getExtrasTotal() - mMovieExtras.getTrailers().size())
+            if(position >  mMovieExtrasModel.getTrailers().size())
                 return TYPE_REVIEW;
         }
 
@@ -81,7 +83,6 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    // TODO: 3/22/16 double check this method.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()){
@@ -89,17 +90,17 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((MovieDetailsVH)holder).bindContent(mMovie);
                 break;
             case TYPE_TRAILER:
-                //((MovieDetailsTrailerVH)holder).bindContent(mMovieExtras.getTrailers().get((position - 1)));
+                ((MovieDetailsTrailerVH)holder).bindContent(mMovieExtrasModel.getTrailers().get((position - 1)));
                 break;
             case TYPE_REVIEW:
-                ((MovieDetailsReviewVH)holder).bindContent(mMovieExtras.getReviews().get((position - 1 - mMovieExtras.getTrailers().size())));
+                ((MovieDetailsReviewVH)holder).bindContent(mMovieExtrasModel.getReviews().get((position - 1 - mMovieExtrasModel.getTrailers().size())));
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return mMovieExtras == null ? 1 : 1 + mMovieExtras.getExtrasTotal();
+        return mMovieExtrasModel == null ? 1 : 1 + mMovieExtrasModel.getExtrasTotal();
     }
 
 }

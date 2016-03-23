@@ -114,6 +114,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         Log.d(TAG, "updateMovie() called with: " + "movie = [" + movie + "]");
         this.mMovie = movie;
         mPresenter.loadMovieDetails(mMovie.getId());
+
     }
 
     @Override
@@ -135,6 +136,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     public void enableTrailerSharing(String trailerId) {
         mTrailerId = trailerId;
         mShareMenuItem.setVisible(true);
+    }
+
+    @Override
+    public void disableTrailerSharing() {
+        mTrailerId = null;
+        mShareMenuItem.setVisible(false);
     }
 
     @Override

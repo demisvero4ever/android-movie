@@ -72,6 +72,8 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
             mView.showMovieExtras(result);
             if(result.getTrailers().size() > 0)
                 mView.enableTrailerSharing(result.getTrailers().get(0).getKey());
+            else
+                mView.disableTrailerSharing();
         }
 
         @Override

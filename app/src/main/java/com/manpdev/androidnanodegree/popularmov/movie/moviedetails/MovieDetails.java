@@ -70,6 +70,8 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
         @Override
         public void onResult(MovieExtrasModel result) {
             mView.showMovieExtras(result);
+            if(result.getTrailers().size() > 0)
+                mView.enableTrailerSharing(result.getTrailers().get(0).getKey());
         }
 
         @Override

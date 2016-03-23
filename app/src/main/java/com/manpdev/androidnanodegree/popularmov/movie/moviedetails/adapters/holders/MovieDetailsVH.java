@@ -64,6 +64,9 @@ public class MovieDetailsVH extends RecyclerView.ViewHolder{
     }
 
     public void bindContent(MovieModel movie){
+        if(movie == null)
+            return;
+
         this.mTitleContainer.setVisibility(View.VISIBLE);
         this.mMovieFavorite = movie.isFavorite();
 

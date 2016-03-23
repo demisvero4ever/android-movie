@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_review_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:id="@+id/ll_review_container"
+        android:background="@drawable/background_review_container_ripple"
         android:orientation="vertical"
         android:elevation="2dp"
         android:padding="@dimen/dimen_half"
         android:layout_marginLeft="@dimen/dimen_default"
         android:layout_marginRight="@dimen/dimen_default"
         android:layout_marginTop="@dimen/dimen_quarter"
-        android:layout_marginBottom="@dimen/dimen_half">
+        android:layout_marginBottom="@dimen/dimen_half"
+        android:clickable="true">
 
         <TextView
             android:id="@+id/tv_movie_review_content"

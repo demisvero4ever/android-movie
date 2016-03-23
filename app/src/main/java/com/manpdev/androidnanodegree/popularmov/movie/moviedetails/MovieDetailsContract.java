@@ -15,6 +15,7 @@ public interface MovieDetailsContract {
     interface MovieDetailsView{
         void showMovieExtras(MovieExtrasModel extras);
         void favoriteSelection(boolean enable);
+        void enableTrailerSharing(String trailerId);
     }
 
     interface MovieDetailsPresenter{

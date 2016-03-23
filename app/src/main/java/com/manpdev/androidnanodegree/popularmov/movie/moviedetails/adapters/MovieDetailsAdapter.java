@@ -44,7 +44,7 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mMovieExtrasModel = mMovieExtrasModel;
     }
 
-    public void updateMovie(MovieModel mMovie) {
+    public void setMovie(MovieModel mMovie) {
         this.mMovie = mMovie;
     }
 

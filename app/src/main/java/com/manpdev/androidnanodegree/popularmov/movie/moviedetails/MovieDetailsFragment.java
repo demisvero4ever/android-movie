@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,20 +35,21 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private MovieDetailsAdapter mMovieAdapter;
 
     private MovieDetailsContract.MovieDetailsPresenter mPresenter;
+    private String mTrailerId;
+    private MenuItem mShareMenuItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
         if(getArguments() != null){
             this.mMovie = getArguments().getParcelable(MovieSelectionListener.EXTRA_MOVIE);
-        }else if(savedInstanceState != null){
+        }else if(savedInstanceState != null) {
             this.mMovie = savedInstanceState.getParcelable(MOVIE_STATE);
         }
-
-        if(this.mMovie != null)
-            mMovieAdapter = new MovieDetailsAdapter(mMovie, this);
-
         mPresenter = new MovieDetails(getContext(), this);
+        mMovieAdapter = new MovieDetailsAdapter(mMovie, this);
     }
 
     @Override
@@ -64,13 +68,29 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         RecyclerView mMovieDetailList = (RecyclerView) root.findViewById(R.id.rv_movie_details);
         mMovieDetailList.setHasFixedSize(true);
         mMovieDetailList.setLayoutManager(llm);
-
-        if(this.mMovieAdapter != null)
-            mMovieDetailList.setAdapter(this.mMovieAdapter);
+        mMovieDetailList.setAdapter(this.mMovieAdapter);
 
         if (mMovie != null && !mTwoPanels)
             updateMovie(mMovie);
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        mShareMenuItem =
+                menu.add(Menu.NONE, R.id.share_trailer, 10, R.string.share_label);
+        mShareMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        mShareMenuItem.setIcon(R.drawable.ic_share_white_24dp);
+        mShareMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                shareTrailer();
+                return true;
+            }
+        });
+        mShareMenuItem.setVisible(false);
     }
 
     @Override
@@ -107,8 +127,14 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void favoriteSelection(boolean isFavorite) {
         mMovie.setFavorite(isFavorite);
-        mMovieAdapter.updateMovie(mMovie);
+        mMovieAdapter.setMovie(mMovie);
         mMovieAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void enableTrailerSharing(String trailerId) {
+        mTrailerId = trailerId;
+        mShareMenuItem.setVisible(true);
     }
 
     @Override
@@ -125,14 +151,21 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     public void openTrailerVideo(String videoId) {
         Intent intent  = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.youtube_video_base_url) + videoId));
-        getContext().startActivity(intent);
+        startActivity(intent);
     }
 
     @Override
     public void openWebReview(String url) {
         Intent intent  = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
-        getContext().startActivity(intent);
+        startActivity(intent);
+    }
+
+    private void shareTrailer(){
+        Intent toShare = new Intent(Intent.ACTION_SEND);
+        toShare.putExtra(Intent.EXTRA_TEXT, getString(R.string.youtube_video_base_url) + mTrailerId);
+        toShare.setType("text/plain");
+        startActivity(toShare);
     }
 }
 

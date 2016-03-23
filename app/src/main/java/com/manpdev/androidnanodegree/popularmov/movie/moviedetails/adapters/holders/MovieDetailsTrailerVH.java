@@ -34,7 +34,7 @@ public class MovieDetailsTrailerVH extends RecyclerView.ViewHolder{
     public void bindContent(MovieTrailerModel trailer){
         this.mVideoId = trailer.getKey();
         Picasso.with(mTrailerThumbnail.getContext())
-                .load(String.format("http://img.youtube.com/vi/%s/0.jpg", trailer.getKey()))
+                .load(String.format(mTrailerThumbnail.getContext().getString(R.string.youtube_thumbnail_url), trailer.getKey()))
                 .error(R.drawable.ic_no_poster_available)
                 .placeholder(android.R.color.black)
                 .into(mTrailerThumbnail);

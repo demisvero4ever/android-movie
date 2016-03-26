@@ -101,6 +101,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onStop() {
         super.onStop();
+        mPresenter.removeCallBacks();
     }
 
     @Override

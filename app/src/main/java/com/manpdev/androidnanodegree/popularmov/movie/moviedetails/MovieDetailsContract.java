@@ -23,5 +23,6 @@ public interface MovieDetailsContract {
         void loadMovieDetails(int cloudMovieId);
         void saveMovieAsFavorite(MovieModel movie);
         void removeMovieFromFavorites(int id);
+        void removeCallBacks();
     }
 }

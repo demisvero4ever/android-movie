@@ -20,7 +20,6 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
     private static final String TAG = "MovieDetails";
 
     private static final String CHECK_FAV_TASK_ID = "123";
-    private static final String GET_TRAILERS_TASK_ID = "345";
     private static final String GET_EXTRAS_TASK_ID = "567";
     private static final String MARK_AS_FAV_TASK_ID = "890";
     private static final String REM_FROM_FAV_TASK_ID = "101";
@@ -45,15 +44,47 @@ public class MovieDetails implements MovieDetailsContract.MovieDetailsPresenter 
 
     @Override
     public void saveMovieAsFavorite(MovieModel movie) {
-        mTaskProcessor.perform(MARK_AS_FAV_TASK_ID, new MarkMovieAsFavoriteOperation(mContext, movie));
+        mTaskProcessor.perform(MARK_AS_FAV_TASK_ID, new MarkMovieAsFavoriteOperation(mContext, movie), mSaveAsFavCallback);
     }
 
     @Override
     public void removeMovieFromFavorites(int movieId) {
-        mTaskProcessor.perform(REM_FROM_FAV_TASK_ID, new RemoveMovieFromFavoritesOperation(mContext, movieId));
+        mTaskProcessor.perform(REM_FROM_FAV_TASK_ID, new RemoveMovieFromFavoritesOperation(mContext, movieId), mRemAsFavCallback);
+    }
+
+    @Override
+    public void removeCallBacks() {
+        mTaskProcessor.unSubscribeOperation(CHECK_FAV_TASK_ID);
+        mTaskProcessor.unSubscribeOperation(MARK_AS_FAV_TASK_ID);
+        mTaskProcessor.unSubscribeOperation(REM_FROM_FAV_TASK_ID);
+        mTaskProcessor.unSubscribeOperation(GET_EXTRAS_TASK_ID);
     }
 
     //Callbacks
+    private Callback<Boolean> mSaveAsFavCallback = new Callback<Boolean>() {
+        @Override
+        public void onResult(Boolean result) {
+            mView.favoriteSelection(result);
+        }
+
+        @Override
+        public void onFailure(Throwable th) {
+            Log.e(TAG, "onFailure: ", th);
+        }
+    };
+
+    private Callback<Boolean> mRemAsFavCallback = new Callback<Boolean>() {
+        @Override
+        public void onResult(Boolean result) {
+            mView.favoriteSelection(!result);
+        }
+
+        @Override
+        public void onFailure(Throwable th) {
+            Log.e(TAG, "onFailure: ", th);
+        }
+    };
+
     private Callback<Boolean> mFavCheckCallback = new Callback<Boolean>() {
         @Override
         public void onResult(Boolean result) {

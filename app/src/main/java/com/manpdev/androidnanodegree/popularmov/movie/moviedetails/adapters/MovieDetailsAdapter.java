@@ -1,6 +1,7 @@
 package com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,11 +38,14 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mListener = listener;
     }
 
-    public void setMovieExtras(MovieExtrasModel mMovieExtrasModel) {
-        if(mMovie.getId() != mMovieExtrasModel.getmMovieId())
+    public void setMovieExtras(@Nullable MovieExtrasModel movieExtrasModel) {
+        if(movieExtrasModel == null)
             return;
 
-        this.mMovieExtrasModel = mMovieExtrasModel;
+        if(mMovie.getId() != movieExtrasModel.getmMovieId())
+            return;
+
+        this.mMovieExtrasModel = movieExtrasModel;
     }
 
     public void setMovie(MovieModel mMovie) {

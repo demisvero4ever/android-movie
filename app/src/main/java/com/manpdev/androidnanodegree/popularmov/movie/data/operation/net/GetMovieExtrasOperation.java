@@ -31,6 +31,8 @@ public class GetMovieExtrasOperation extends Task<MovieExtrasModel> {
 
     @Override
     public MovieExtrasModel execute() throws Throwable {
+        Log.d(TAG, "execute() called");
+
         MovieExtrasModel extras = new MovieExtrasModel(mMovieId);
         extras.setTrailers(getMovieTrailers().getResults());
         extras.setReviews(getMovieReviews().getResults());
@@ -40,7 +42,7 @@ public class GetMovieExtrasOperation extends Task<MovieExtrasModel> {
 
     private MovieReviewWrapperModel getMovieReviews(){
         try {
-            Log.d(TAG, "execute() called");
+            Log.d(TAG, "getMovieReviews() called");
 
             Call<MovieReviewWrapperModel> request = mRequester.getMovieApi()
                     .getMovieReviews(mMovieId, mRequester.getMovieApiKey());
@@ -55,7 +57,7 @@ public class GetMovieExtrasOperation extends Task<MovieExtrasModel> {
 
     private MovieTrailerWrapperModel getMovieTrailers(){
         try {
-            Log.d(TAG, "execute() called");
+            Log.d(TAG, "getMovieTrailers() called");
 
             Call<MovieTrailerWrapperModel> request = mRequester.getMovieApi()
                     .getMovieTrailers(mMovieId, mRequester.getMovieApiKey());

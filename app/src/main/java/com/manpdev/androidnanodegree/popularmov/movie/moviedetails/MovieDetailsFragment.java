@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +28,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
     private static final String TAG = "MovieDetailsFragment";
     private static final String MOVIE_STATE = "::movie_state";
+    private static final String MOVIE_EXTRA_STATE = "::movie_extra_state";
 
     private MovieModel mMovie;
     private MovieExtrasModel mMovieExtras;
@@ -46,13 +45,18 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        if(getArguments() != null){
-            this.mMovie = getArguments().getParcelable(MovieSelectionListener.EXTRA_MOVIE);
-        }else if(savedInstanceState != null) {
+        if(savedInstanceState != null) {
             this.mMovie = savedInstanceState.getParcelable(MOVIE_STATE);
+            this.mMovieExtras = savedInstanceState.getParcelable(MOVIE_EXTRA_STATE);
+
+            if(mMovie != null && mMovieExtras != null && mMovie.getId() != mMovieExtras.getmMovieId())
+                mMovieExtras = null;
+        }else if(getArguments() != null){
+            this.mMovie = getArguments().getParcelable(MovieSelectionListener.EXTRA_MOVIE);
         }
         mPresenter = new MovieDetails(getContext(), this);
         mMovieAdapter = new MovieDetailsAdapter(mMovie, this);
+        mMovieAdapter.setMovieExtras(mMovieExtras);
     }
 
     @Override
@@ -110,15 +114,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mMovie != null)
-            outState.putParcelable(MOVIE_STATE, mMovie);
+        outState.putParcelable(MOVIE_STATE, mMovie);
+        outState.putParcelable(MOVIE_EXTRA_STATE, mMovieExtras);
     }
 
     public void updateMovie(MovieModel movie){
         Log.d(TAG, "updateMovie() called with: " + "movie = [" + movie + "]");
+        if(this.mMovie != null && this.mMovieExtras != null && movie.getId() == mMovie.getId())
+            return;
+
         this.mMovie = movie;
         mPresenter.loadMovieDetails(mMovie.getId());
-
     }
 
     @Override
@@ -145,7 +151,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void disableTrailerSharing() {
         mTrailerId = null;
-
         if(mShareMenuItem != null)
             mShareMenuItem.setVisible(false);
     }

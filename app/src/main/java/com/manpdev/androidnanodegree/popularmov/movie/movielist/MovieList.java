@@ -119,6 +119,7 @@ public class MovieList implements MovieListContract.PopularMovieListPresenter,
         if (Preferences.getSelectionOption(mContext).equals(Preferences.FAVORITES))
             mLoadManager.restartLoader(MOVIE_LOADER_ID, null, this);
         else {
+            mLoadManager.destroyLoader(MOVIE_LOADER_ID);
             this.mGetMovieListOperation.setSelectionOption(Preferences.getSelectionOption(mContext));
 
             this.mTaskProcessor.perform(GET_MOVIE_LIST_OP_ID,

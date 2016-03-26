@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -164,11 +167,23 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         startActivity(intent);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void openWebReview(String url) {
-        Intent intent  = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
+        try {
+            CustomTabsIntent.Builder tabBuilder = new CustomTabsIntent.Builder();
+            tabBuilder.enableUrlBarHiding()
+                    .setToolbarColor(getResources().getColor(R.color.colorPrimary))
+                    .setSecondaryToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
+
+            CustomTabsIntent tabIntent = tabBuilder.build();
+            tabIntent.launchUrl(getActivity(), Uri.parse(url));
+        }catch (Exception ex){
+            //if not supported old browser
+            Intent intent  = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        }
     }
 
     private void shareTrailer(){

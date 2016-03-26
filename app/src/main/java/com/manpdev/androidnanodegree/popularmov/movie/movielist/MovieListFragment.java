@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.manpdev.androidnanodegree.popularmov.R;
+import com.manpdev.androidnanodegree.popularmov.movie.Preferences;
 import com.manpdev.androidnanodegree.popularmov.movie.data.model.MovieModel;
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.adapters.MovieListPosterAdapter;
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.adapters.OnMoviePosterClick;
@@ -70,7 +71,7 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
         mSelectionListener = (MovieSelectionListener) getActivity();
         mPresenter.register();
 
-        if (mMovieList.size() == 0)
+        if (mMovieList.size() == 0 || Preferences.getSelectionOption(getContext()).equals(Preferences.FAVORITES))
             mPresenter.loadMovieList();
     }
 
@@ -92,7 +93,6 @@ public class MovieListFragment extends Fragment implements MovieListContract.Pop
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.dismissMovieList();
         mPresenter = null;
     }
 

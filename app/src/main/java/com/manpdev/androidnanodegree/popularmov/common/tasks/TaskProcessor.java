@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
 
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,6 +18,7 @@ import rx.schedulers.Schedulers;
  * novoa on 3/20/16.
  */
 
+@SuppressWarnings({"unchecked", "unused"})
 public class TaskProcessor {
 
     private static SimpleArrayMap<String, Object> sResult = new SimpleArrayMap<>();
@@ -27,10 +27,6 @@ public class TaskProcessor {
 
     private static int CORES = Runtime.getRuntime().availableProcessors();
     private static final ExecutorService sEXECUTOR = Executors.newFixedThreadPool(CORES);
-
-    public static String getOperationId() {
-        return UUID.randomUUID().toString();
-    }
 
     public void cleanOperation(String operationId) {
         sResult.remove(operationId);

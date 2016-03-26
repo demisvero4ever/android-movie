@@ -24,7 +24,7 @@ import com.manpdev.androidnanodegree.popularmov.movie.moviedetails.adapters.Movi
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieListActivity;
 import com.manpdev.androidnanodegree.popularmov.movie.movielist.MovieSelectionListener;
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.MovieDetailsView, MovieDetailsListener{
+public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.MovieDetailsView, MovieDetailsListener {
 
     private static final String TAG = "MovieDetailsFragment";
     private static final String MOVIE_STATE = "::movie_state";
@@ -45,13 +45,13 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             this.mMovie = savedInstanceState.getParcelable(MOVIE_STATE);
             this.mMovieExtras = savedInstanceState.getParcelable(MOVIE_EXTRA_STATE);
 
-            if(mMovie != null && mMovieExtras != null && mMovie.getId() != mMovieExtras.getmMovieId())
+            if (mMovie != null && mMovieExtras != null && mMovie.getId() != mMovieExtras.getmMovieId())
                 mMovieExtras = null;
-        }else if(getArguments() != null){
+        } else if (getArguments() != null) {
             this.mMovie = getArguments().getParcelable(MovieSelectionListener.EXTRA_MOVIE);
         }
         mPresenter = new MovieDetails(getContext(), this);
@@ -118,9 +118,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         outState.putParcelable(MOVIE_EXTRA_STATE, mMovieExtras);
     }
 
-    public void updateMovie(MovieModel movie){
+    public void updateMovie(MovieModel movie) {
         Log.d(TAG, "updateMovie() called with: " + "movie = [" + movie + "]");
-        if(this.mMovie != null && this.mMovieExtras != null && movie.getId() == mMovie.getId())
+        if (this.mMovie != null && this.mMovieExtras != null && movie.getId() == mMovie.getId())
             return;
 
         this.mMovie = movie;
@@ -151,7 +151,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void disableTrailerSharing() {
         mTrailerId = null;
-        if(mShareMenuItem != null)
+        if (mShareMenuItem != null)
             mShareMenuItem.setVisible(false);
     }
 
@@ -167,9 +167,13 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
     @Override
     public void openTrailerVideo(String videoId) {
-        Intent intent  = new Intent(Intent.ACTION_VIEW);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.youtube_video_base_url) + videoId));
-        startActivity(intent);
+
+        boolean exist = intent.resolveActivityInfo(getContext().getPackageManager(), 0) != null;
+
+        if (exist)
+            startActivity(intent);
     }
 
     @SuppressWarnings("deprecation")
@@ -183,15 +187,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
             CustomTabsIntent tabIntent = tabBuilder.build();
             tabIntent.launchUrl(getActivity(), Uri.parse(url));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             //if not supported old browser
-            Intent intent  = new Intent(Intent.ACTION_VIEW);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
-            startActivity(intent);
+            boolean exist = intent.resolveActivityInfo(getContext().getPackageManager(), 0) != null;
+            if (exist)
+                startActivity(intent);
         }
     }
 
-    private void shareTrailer(){
+    private void shareTrailer() {
         Intent toShare = new Intent(Intent.ACTION_SEND);
         toShare.putExtra(Intent.EXTRA_TEXT, getString(R.string.youtube_video_base_url) + mTrailerId);
         toShare.setType("text/plain");

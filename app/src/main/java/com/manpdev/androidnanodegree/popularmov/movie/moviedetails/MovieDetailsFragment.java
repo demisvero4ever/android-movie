@@ -142,7 +142,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void disableTrailerSharing() {
         mTrailerId = null;
-        mShareMenuItem.setVisible(false);
+
+        if(mShareMenuItem != null)
+            mShareMenuItem.setVisible(false);
     }
 
     @Override

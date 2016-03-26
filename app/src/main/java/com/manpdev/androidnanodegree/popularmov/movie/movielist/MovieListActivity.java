@@ -149,8 +149,12 @@ public class MovieListActivity extends AppCompatActivity implements MovieSelecti
     public void clearSelection() {
         mSelectedMovie = null;
 
-        if (mTwoPanels)
-            mDetailFragmentContainer.setVisibility(View.INVISIBLE);
+        if (mTwoPanels) {
+            MovieDetailsFragment detailsFragment = (MovieDetailsFragment) getSupportFragmentManager()
+                    .findFragmentByTag(MOVIE_DETAIL_TAG);
+            detailsFragment.disableTrailerSharing();
+            mDetailFragmentContainer.setVisibility(View.GONE);
+        }
     }
 
     private void updateMovieDetailFragment() {
